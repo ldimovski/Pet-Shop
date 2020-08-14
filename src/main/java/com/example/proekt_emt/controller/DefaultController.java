@@ -10,11 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DefaultController {
     @GetMapping
     public String defaultPage (Model model){
-        return "redirect:home";
+        return "redirect:index";
     }
 
     @GetMapping("/about")
     public String getAbout(){
         return "about";
+    }
+
+
+    @GetMapping("/contact")
+    public String getContactPage(){
+        return "contact";
     }
 }

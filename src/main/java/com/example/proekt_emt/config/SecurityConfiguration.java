@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .permitAll();
     }*/
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -48,7 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/home","/signup/**").permitAll()
+                    .antMatchers("/", "/home","/signup/**", "/product/**", "/shop").permitAll()
+                    .antMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**").permitAll()
                     //.antMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()

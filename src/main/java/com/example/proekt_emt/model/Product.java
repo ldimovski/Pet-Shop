@@ -3,6 +3,8 @@ package com.example.proekt_emt.model;
 import com.example.proekt_emt.model.Enumerations.ItemCategory;
 import com.example.proekt_emt.model.Enumerations.ItemType;
 import com.sun.istack.NotNull;
+
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +22,9 @@ public class Product {
     @Lob
     private String imageBase64;
 
+    private String description;
+
+
     @NotNull
     @Min(value = 0,message = "Price must be bigger than 0")
     private Float price;
@@ -28,7 +33,10 @@ public class Product {
     @Min(value = 0,message = "Price must be bigger than 0")
     private Integer avalibleProducts;
 
-    private Long Rating;
+    private Integer soldItems = 0;
+
+    @Max(value = 5, message = "Rating can not be more than 5")
+    private float Rating;
 
     @NotNull
     @ManyToOne
@@ -71,6 +79,13 @@ public class Product {
         return price;
     }
 
+    public String getPriceDollar(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getPrice());
+        sb.append('$');
+        return sb.toString();
+    }
+
     public void setPrice(Float price) {
         this.price = price;
     }
@@ -83,11 +98,11 @@ public class Product {
         this.avalibleProducts = avalibleProducts;
     }
 
-    public Long getRating() {
+    public float getRating() {
         return Rating;
     }
 
-    public void setRating(Long rating) {
+    public void setRating(float rating) {
         Rating = rating;
     }
 
@@ -121,5 +136,21 @@ public class Product {
 
     public void setItemCategory(ItemCategory itemCategory) {
         this.itemCategory = itemCategory;
+    }
+
+    public Integer getSoldItems() {
+        return soldItems;
+    }
+
+    public void setSoldItems(Integer soldItems) {
+        this.soldItems = soldItems;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

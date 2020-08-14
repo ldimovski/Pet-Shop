@@ -14,12 +14,22 @@ public class StoreLocation {
     @NotNull
     private String location;
 
+    private String name;
+
     private String workingTime;
 
     private boolean works;
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(Long id) {
