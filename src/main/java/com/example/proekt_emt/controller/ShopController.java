@@ -1,9 +1,11 @@
 package com.example.proekt_emt.controller;
 
+import com.example.proekt_emt.model.DealOfTheDay;
 import com.example.proekt_emt.model.Enumerations.ItemCategory;
 import com.example.proekt_emt.model.Enumerations.ItemType;
 import com.example.proekt_emt.model.Manufacturer;
 import com.example.proekt_emt.model.Product;
+import com.example.proekt_emt.service.DealOfTheDayService;
 import com.example.proekt_emt.service.ManufacturerService;
 import com.example.proekt_emt.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -20,11 +23,14 @@ public class ShopController {
 
     private final ProductService productService;
     private final ManufacturerService manufacturerService;
+    private final DealOfTheDayService dealOfTheDayService;
 
     public ShopController(ProductService productService,
-                          ManufacturerService manufacturerService){
+                          ManufacturerService manufacturerService,
+                          DealOfTheDayService dealOfTheDayService){
         this.productService = productService;
         this.manufacturerService = manufacturerService;
+        this.dealOfTheDayService = dealOfTheDayService;
     }
 
     @GetMapping
@@ -32,14 +38,15 @@ public class ShopController {
         List<Product> products = this.productService.findAll();
         model.addAttribute("products", products);
 
-        //List<Manufacturer> manufacturers = this.manufacturerService.findAll();
-
         /*
-        Manufacturer manufacturer = new Manufacturer();
-        manufacturer.setDescription("aa");
-        manufacturer.setLocation("aaaa");
-        this.manufacturerService.saveManufacturer(manufacturer);*/
-
+        Long l = new Long(1);
+        Product p = this.productService.findById(l);
+        DealOfTheDay d = new DealOfTheDay();
+        d.setProduct(p);
+        d.setActive(true);
+        d.setDiscount(30);
+        d.setEndDate(LocalDateTime.of(2020,10,12,12,12,12));
+        this.dealOfTheDayService.save(d);*/
 
 /*
         for(int i=0; i<3; i++)

@@ -1,6 +1,8 @@
 package com.example.proekt_emt.controller;
 
+import com.example.proekt_emt.model.DealOfTheDay;
 import com.example.proekt_emt.model.Product;
+import com.example.proekt_emt.service.DealOfTheDayService;
 import com.example.proekt_emt.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +16,12 @@ import java.util.List;
 public class HomeController {
 
     private final ProductService productService;
+    private final DealOfTheDayService dealOfTheDayService;
 
-    public HomeController(ProductService productService){
+    public HomeController(ProductService productService,
+                          DealOfTheDayService dealOfTheDayService){
         this.productService = productService;
+        this.dealOfTheDayService = dealOfTheDayService;
     }
 
     @GetMapping
@@ -25,5 +30,9 @@ public class HomeController {
         List<Product> products = this.productService.getBestProducts();
         model.addAttribute("products", products);
         return "index";
+
+        //DealOfTheDay d = this.dealOfTheDayService.findFirstByActive(true);
+        //model.addAttribute("deal", d);
+
     }
 }

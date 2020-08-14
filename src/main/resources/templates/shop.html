@@ -94,18 +94,21 @@
     	<div class="container">
     		<div class="row justify-content-center">
     			<div class="col-md-10 mb-5 text-center">
-    				<ul class="product-category">
-    					<li><a href="#" class="active">All</a></li>
-    					<li><a href="#">Dog</a></li>
-    					<li><a href="#">Cat</a></li>
-    					<li><a href="#">Parrot</a></li>
-    					<li><a href="#">Other</a></li>
+    				<ul class="product-category myBtnContainer">
+    					<li><a onclick="filterSelection('ALL')" class="active customElement">All</a></li>
+    					<li><a onclick="filterSelection('DOG')" class="customElement">Dog</a></li>
+    					<li><a onclick="filterSelection('CAT')" class="customElement">Cat</a></li>
+    					<li><a onclick="filterSelection('PARROT')" class="customElement">Parrot</a></li>
+                        <li><a onclick="filterSelection('REPTILE')" class="customElement">Reptile</a></li>
+                        <li><a onclick="filterSelection('RABBIT')" class="customElement">Rabbit</a></li>
+                        <li><a onclick="filterSelection('FISH')" class="customElement">Fish</a></li>
+    					<li><a onclick="filterSelection('OTHER')" class="customElement">Other</a></li>
     				</ul>
     			</div>
     		</div>
 
     		<div id="MOEEEE" class="row">
-    			<div th:each="product : ${products}" class="col-md-6 col-lg-3 ftco-animate">
+    			<div th:each="product : ${products}" th:attr="dataType=${product.getItemCategory()}" class="col-md-6 col-lg-3 ftco-animate filterDiv">
     				<div class="product">
     					<a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
 							<span  th:if="${product.getRating() > 4}" class="status icon-star"></span>
@@ -147,9 +150,6 @@
 
 
 			<hr>
-
-
-
 
 
 
@@ -289,3 +289,69 @@
     
   </body>
 </html>
+
+<script>
+    function filterSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("filterDiv");
+        if (c === "ALL"){
+            for (i = 0; i < x.length; i++) {
+                w3RemoveClass(x[i], "hidee");
+            }
+        }
+        else {
+            for (i = 0; i < x.length; i++) {
+                w3RemoveClass(x[i], "hidee");
+                //if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+                if(x[i].getAttribute('dataType') !== c){
+                    w3AddClass(x[i], "hidee");
+                }
+                //console.log(x[i].getAttribute('dataType') === c)
+            }
+        }
+        x = document.getElementsByClassName("customElement");
+        for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "active");
+        }
+    }
+
+    // Show filtered elements
+    function w3AddClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {
+                element.className += " " + arr2[i];
+            }
+        }
+
+    }
+
+    // Hide elements that are not selected
+    function w3RemoveClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+        }
+        element.className = arr1.join(" ");
+    }
+
+
+    $(document).ready(function() {
+        $(".customElement").click(function () {
+            console.log("STIGNAV");
+            $(this).addClass("active");
+        });
+    });
+</script>
+
+<style>
+    .hidee {
+        display: none;
+    }
+</style>
