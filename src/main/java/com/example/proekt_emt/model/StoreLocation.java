@@ -1,8 +1,10 @@
 package com.example.proekt_emt.model;
 
+import com.example.proekt_emt.service.ProductService;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "storeLocations")
@@ -14,11 +16,27 @@ public class StoreLocation {
     @NotNull
     private String location;
 
+    @NotNull
     private String name;
 
     private String workingTime;
 
     private boolean works;
+
+    private String number;
+
+    @ManyToMany
+    private List<Product> products;
+
+    public String getNumber() {
+        return number;
+    }
+
+
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public Long getId() {
         return id;
@@ -58,5 +76,22 @@ public class StoreLocation {
 
     public void setWorks(boolean works) {
         this.works = works;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public boolean checkProduct (List<StoreLocation> locations){
+        for (StoreLocation storeLocation: locations ) {
+            if(storeLocation.getId().equals(getId())){
+                return true;
+            }
+        }
+        return false;
     }
 }
