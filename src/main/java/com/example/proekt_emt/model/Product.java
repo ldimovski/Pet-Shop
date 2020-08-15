@@ -82,7 +82,7 @@ public class Product {
     public String getPriceDollar(){
         StringBuilder sb = new StringBuilder();
         sb.append(getPrice());
-        sb.append('$');
+        sb.append("MKD");
         return sb.toString();
     }
 

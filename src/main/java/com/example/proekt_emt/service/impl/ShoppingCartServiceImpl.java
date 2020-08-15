@@ -25,17 +25,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ItemService itemService;
     private final ProductService productService;
     private final PaymentService paymentService;
+    private final AuthService authService;
 
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository,
                                    UserService userService,
                                    ProductService productService,
                                    ItemService itemService,
-                                   PaymentService paymentService){
+                                   PaymentService paymentService,
+                                   AuthService authService){
         this.shoppingCartRepository = shoppingCartRepository;
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
         this.paymentService = paymentService;
+        this.authService = authService;
     }
 
 
@@ -73,7 +76,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public List<Item> removeBookFromShoppingCart(String userId, Long bookId) {
+    public List<Item> removeBookFromShoppingCart(String userId, Long itemId) {
         if(!this.shoppingCartRepository.existsByUserUsernameAndStatus(userId, CartStatus.CREATED)){
             throw new NoActiveShoppingCartFound(userId);
         }
@@ -81,7 +84,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             ShoppingCart shoppingCart = this.getActiveShoppingCartOrCreateOne(userId);
             List<Item> items = this.findShoppingCartItems(shoppingCart.getId());
             for(Item item: items){
-                if(item.getProduct().getId().equals(bookId)){
+                if(item.getId().equals(itemId)){
                     this.itemService.deleteItem(item.getId());
                     break;
                 }
@@ -142,6 +145,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             //shoppingCart.setItems(items);
             shoppingCart.setStatus(CartStatus.FINISHED);
+            User user = this.authService.getCurrentUser();
+            shoppingCart.setCountry(user.getCountry());
+            shoppingCart.setCity(user.getCity());
+            shoppingCart.setAddress(user.getAddress());
             shoppingCart.setEndDate(LocalDateTime.now());
 
             //this.itemService.deleteAllByShoppingCart(shoppingCart.getId());
@@ -185,7 +192,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Float getFullPrice(Long shoppingCartId) {
-        List<Item> items = this.itemService.findAllByShoppingCart(shoppingCartId);
+        List<Item> items = this.findShoppingCartItems(shoppingCartId);
         float price = 0;
         for (Item item : items){
             float tmp = item.getQuantity() * item.getProduct().getPrice();

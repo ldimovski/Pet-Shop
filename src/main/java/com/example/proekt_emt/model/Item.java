@@ -51,4 +51,12 @@ public class Item {
     public void setShoppingCart(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
+
+    public float getTotalPrice(){
+        return this.product.getPrice() * quantity;
+    }
+
+    public String getTotalPriceUSD(){
+        return (this.product.getPrice() * quantity) + "MKD";
+    }
 }
