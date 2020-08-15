@@ -48,8 +48,4 @@ public class ShopController {
 
     }
 
-    @GetMapping("/cart")
-    public String getNew(){
-        return "cart";
-    }
 }

@@ -83,6 +83,11 @@
       </div>
     </div>
 
+
+  <div th:if="${param.message}">
+      <h2 class="text-center text-primary" th:text="${param.message}"></h2>
+  </div>
+
     <section class="ftco-section">
         <div class="row">
             <div class="col-3" style="padding-top: 4%; padding-left: 3%;" id="filters">
@@ -160,15 +165,15 @@
                                     </div>
                                     <div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() > 0}">
                                         <div class="m-auto d-flex">
-                                            <a th:href="@{/product/{id} (id=${product.getId()})}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                                                <span><i class="ion-ios-menu"></i></span>
-                                            </a>
-                                            <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-                                                <span><i class="ion-ios-cart"></i></span>
-                                            </a>
-                                            <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                                                <span><i class="ion-ios-heart"></i></span>
-                                            </a>
+                                            <form th:action="@{/product/{id} (id=${product.getId()})}" th:method="get">
+                                                <a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-menu"></i></span></button></a>
+                                            </form>
+                                            <form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
+                                                <a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
+                                            </form>
+                                            <form>
+                                                <a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() == 0}">
