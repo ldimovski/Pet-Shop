@@ -145,6 +145,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 }
                 if (! (item.getProduct().getAvalibleProducts() < item.getQuantity())){
                     item.getProduct().setAvalibleProducts(item.getProduct().getAvalibleProducts() - item.getQuantity());
+                    item.getProduct().setSoldItems(item.getProduct().getSoldItems() + item.getQuantity());
                 }
             }
 

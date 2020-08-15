@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.w3.org/1999/xhtml">
 	<head>
 	<title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
 	<meta charset="utf-8">
@@ -87,7 +88,7 @@
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 mb-5 ftco-animate">
-    				<a href="images/product-1.jpg" class="image-popup"><img src="images/product-1.jpg" class="img-fluid" alt="Colorlib Template"></a>
+    				<a th:href="${product.getImageBase64()}" class="image-popup"><img th:src="${product.getImageBase64()}" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
     				<h3 th:text="${product.getName()}"></h3>
@@ -144,12 +145,15 @@
           	</div>
 					<br>
 					<div class="row">
-						<div class="col-6">
-							<p><a id="addToCart"  class="btn btn-black py-3 px-5" style="color: white">Add to Cart</a></p>
+						<div class="col-4" th:if="${isModerator}">
+							<p><a id="addToCart"  class="btn btn-black py-3 px-5" style="color: white">Buy</a></p>
 						</div>
 
-						<div class="col-6">
+						<div class="col-4">
 							<p><a href="/shop" class="btn btn-black py-3 px-5">Catalog</a></p>
+						</div>
+						<div class="col-4">
+							<p><a href="/shop" class="btn btn-black py-3 px-5">Edit</a></p>
 						</div>
 					</div>
     			</div>

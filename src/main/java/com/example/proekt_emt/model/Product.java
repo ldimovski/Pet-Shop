@@ -46,8 +46,10 @@ public class Product {
     private List<StoreLocation> storeLocations;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ItemType itemType;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ItemCategory itemCategory;
 

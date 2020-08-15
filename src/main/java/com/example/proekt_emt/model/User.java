@@ -102,4 +102,13 @@ public class User implements UserDetails {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public boolean isModerator(){
+        for(Role r : roles){
+            if(r.getName().equals("Moderator")){
+                return true;
+            }
+        }
+        return false;
+    }
 }

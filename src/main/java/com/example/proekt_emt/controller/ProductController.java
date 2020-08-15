@@ -1,19 +1,23 @@
 package com.example.proekt_emt.controller;
 
 
+import com.example.proekt_emt.model.Enumerations.ItemCategory;
+import com.example.proekt_emt.model.Enumerations.ItemType;
+import com.example.proekt_emt.model.Manufacturer;
 import com.example.proekt_emt.model.Product;
 import com.example.proekt_emt.model.StoreLocation;
-import com.example.proekt_emt.service.ManufacturerService;
-import com.example.proekt_emt.service.ProductService;
-import com.example.proekt_emt.service.StoreLocationService;
+import com.example.proekt_emt.model.User;
+import com.example.proekt_emt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -23,18 +27,71 @@ public class ProductController {
     private final ProductService productService;
     private final ManufacturerService manufacturerService;
     private final StoreLocationService storeLocationService;
+    private final AuthService authService;
+    private final UserService userService;
 
     public ProductController(ProductService productService,
                              ManufacturerService manufacturerService,
-                             StoreLocationService storeLocationService){
+                             StoreLocationService storeLocationService,
+                             AuthService authService,
+                             UserService userService){
         this.manufacturerService = manufacturerService;
         this.productService = productService;
         this.storeLocationService = storeLocationService;
+        this.authService = authService;
+        this.userService = userService;
     }
 
     @GetMapping("/new")
-    public String addProductPage(){
+    public String addProductPage(Model model){
+        List<Manufacturer> manufacturers = this.manufacturerService.findAll();
+        model.addAttribute("manufacturers", manufacturers);
+        model.addAttribute("product", new Product());
+        List<StoreLocation> storeLocations = this.storeLocationService.findAll();
+        model.addAttribute("stores", storeLocations);
+        model.addAttribute("categories", ItemCategory.values());
+        model.addAttribute("types", ItemType.values());
+
+
         return "newProduct";
+    }
+
+    @PostMapping
+    public String saveProduct(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile image, Model model){
+        if (bindingResult.hasErrors()){
+            List<Manufacturer> manufacturers = this.manufacturerService.findAll();
+            model.addAttribute("manufacturers", manufacturers);
+            model.addAttribute("product", new Product());
+            List<StoreLocation> storeLocations = this.storeLocationService.findAll();
+            model.addAttribute("stores", storeLocations);
+            model.addAttribute("categories", ItemCategory.values());
+            model.addAttribute("types", ItemType.values());
+            return "newProduct";
+        }
+
+        if(product.getPrice() <= 0 ){
+            return "redirect:/product/new?message=Price must be bigger than 0";
+        }
+
+        if(product.getRating() <= 0 || product.getRating() > 5){
+            return "redirect:/product/new?message=Rating must be bigger than 0 and smaller than 5";
+        }
+        if(product.getAvalibleProducts() <= 0 ){
+            return "redirect:/product/new?message=Avalible products must be bigger than 0";
+        }
+        if(product.getName().equals("")){
+            return "redirect:/product/new?message=Name cannot be emoty";
+        }
+
+
+        try {
+            this.productService.saveProduct(product, image);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return "redirect:/product/new?message=" + e.getLocalizedMessage();
+        }
+        return "redirect:/shop";
     }
 
     @GetMapping("/{id}")
@@ -48,6 +105,9 @@ public class ProductController {
 
             List<StoreLocation> storeLocations = this.storeLocationService.findAll();
             model.addAttribute("stores", storeLocations);
+
+            User user = this.authService.getCurrentUser();
+            model.addAttribute("isModerator", user.isModerator());
             return "product-single";
         }
         catch (RuntimeException ex){

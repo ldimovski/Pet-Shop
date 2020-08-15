@@ -149,7 +149,7 @@
                     <div id="MOEEEE" class="row">
                         <div th:each="product : ${products}" th:attr="dataType=${product.getItemCategory()}, dataCategory=${product.getItemType()}, dataPrice=${product.getPrice()}" class="col-md-6 col-lg-3 ftco-animate filterDiv">
                             <div class="product">
-                                <a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
+                                <a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" th:src="${product.getImageBase64()}" alt="No Photo">
                                     <span  th:if="${product.getRating() > 4}" class="status icon-star"></span>
 
                                     <div class="overlay"></div>
