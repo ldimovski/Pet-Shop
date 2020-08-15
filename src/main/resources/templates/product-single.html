@@ -91,7 +91,7 @@
     			</div>
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
     				<h3 th:text="${product.getName()}"></h3>
-					<a th:href="@{/manufacturer/{id} (id=${product.getManufacturer().getId()})}"><h4 class="text-muted" th:text="${product.getManufacturer().getName()}"></h4></a>
+					<h4 class="text-muted" th:text="${product.getManufacturer().getName()}"></h4>
     				<div class="rating d-flex">
 							<p class="text-left mr-4">
 								<a class="mr-2 text-info" th:text="${product.getRating()}"></a>
@@ -126,11 +126,15 @@
 	                   <i class="ion-ios-remove"></i>
 	                	</button>
 	            		</span>
-	             	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+	             	<input th:attr="productId=${product.getId()}" type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
 	             	<span class="input-group-btn ml-2">
 	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
 	                     <i class="ion-ios-add"></i>
 	                 </button>
+
+
+
+
 	             	</span>
 	          	</div>
 	          	<div class="w-100"></div>
@@ -141,14 +145,13 @@
 					<br>
 					<div class="row">
 						<div class="col-6">
-							<p><a href="cart.html" class="btn btn-black py-3 px-5">Add to Cart</a></p>
+							<p><a id="addToCart"  class="btn btn-black py-3 px-5" style="color: white">Add to Cart</a></p>
 						</div>
+
 						<div class="col-6">
 							<p><a href="/shop" class="btn btn-black py-3 px-5">Catalog</a></p>
 						</div>
 					</div>
-
-
     			</div>
     		</div>
     	</div>
@@ -167,10 +170,6 @@
 			</div>
 		</section>
     </section>
-
-
-
-
 
 
     <section class="ftco-section" style="padding-top: 0px;">
@@ -203,15 +202,15 @@
 							</div>
 							<div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() > 0}">
 								<div class="m-auto d-flex">
-									<a th:href="@{/product/{id} (id=${product.getId()})}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
+									<form th:action="@{/product/{id} (id=${product.getId()})}" th:method="get">
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-menu"></i></span></button></a>
+									</form>
+									<form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
+									</form>
+									<form>
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
+									</form>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() == 0}">
@@ -347,6 +346,18 @@
 		            $('#quantity').val(quantity - 1);
 		            }
 		    });
+
+
+
+			$("#addToCart").click(function () {
+				var id = $("#quantity").attr("productId");
+				var quantity = document.getElementById("quantity").value;
+				console.log("Clicked");
+				$.post('/cart/add/' + id + '/'+quantity, {}, function () {
+
+				}, 'json')
+				window.location.href='/shop?message=Added to cart';
+			});
 
 		});
 	</script>

@@ -91,7 +91,7 @@
 						    <thead class="thead-primary">
 						      <tr class="text-center">
 						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
+						        <th>Photo</th>
 						        <th>Product name</th>
 						        <th>Price</th>
 						        <th>Quantity</th>
@@ -107,11 +107,12 @@
 									</form>
 								</td>
 						        
-						        <td class="image-prod"><div class="img" style="background-image:url(images/product-1.jpg);"></div></td>
+						        <td class="image-prod"><a th:href="@{/product/{id} (id=${item.getProduct().getId()})}"><div class="img" style="background-image:url(images/product-1.jpg);"></div></a></td>
 						        
 						        <td class="product-name">
 						        	<h3 th:text="${item.getProduct().getName()}"></h3>
 						        	<p th:text="${item.getProduct().getDescription()}"></p>
+									<p class="text-danger" th:if="${item.getQuantity() > item.getProduct().getAvalibleProducts()}" th:text="'There are only  ' + ${item.getProduct().getAvalibleProducts()} + ' products avalible'"> </p>
 						        </td>
 
 						        <td class="price" th:text="${item.getProduct().getPriceDollar()}">$4.90</td>
@@ -120,7 +121,7 @@
 
 						        <td class="total" th:text="${item.getTotalPriceUSD()}"></td>
 						      </tr><!-- END TR-->
-							<tr>
+							<tr th:if="${amount > 0}">
 								<td colspan="2">
 								<form th:action="@{/cart/checkout}" th:method="post">
 									<input type="hidden" th:value="${amount}" name="amount"/>

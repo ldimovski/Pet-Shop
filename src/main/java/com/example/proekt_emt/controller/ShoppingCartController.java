@@ -55,7 +55,7 @@ public class ShoppingCartController {
         float price = this.shoppingCartService.getFullPrice(shoppingCart.getId());
 
         model.addAttribute("amount", (int)price);
-        String totalPriceUSD = price + "$";
+        String totalPriceUSD = price + "MKD";
         model.addAttribute("totalPrice", totalPriceUSD);
         model.addAttribute("currency", "eur");
         model.addAttribute("stripePublicKey", this.publicKey);
@@ -70,6 +70,17 @@ public class ShoppingCartController {
     public String addProductToShoppingCart(@PathVariable Long id){
         try{
             Item item = this.shoppingCartService.addProductToShoppingCart(this.authService.getCurrentUserId(), id);
+        }
+        catch (RuntimeException ex){
+            return "redirect:/shop?message=" + ex.getLocalizedMessage();
+        }
+        return "redirect:/shop?message=Added to cart    ";
+    }
+
+    @PostMapping("/add/{id}/{quantity}")
+    public String addProductToShoppingCartQuantity(@PathVariable Long id, @PathVariable Integer quantity){
+        try{
+            Item item = this.shoppingCartService.addProductToShoppingCartQuantity(this.authService.getCurrentUserId(), id, quantity);
         }
         catch (RuntimeException ex){
             return "redirect:/shop?message=" + ex.getLocalizedMessage();

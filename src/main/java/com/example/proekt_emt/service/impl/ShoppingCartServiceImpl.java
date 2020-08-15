@@ -76,6 +76,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    public Item addProductToShoppingCartQuantity(String userId, Long productId, Integer quantity) {
+        ShoppingCart shoppingCart = this.getActiveShoppingCartOrCreateOne(userId);
+        Product product = this.productService.findById(productId);
+        if(product != null){
+            Item item = this.itemService.findByShoppingCartAndProduct(shoppingCart, product);
+            if(item == null){
+                item = new Item();
+                item.setQuantity(quantity);
+                item.setShoppingCart(shoppingCart);
+                item.setProduct(product);
+            }
+            else {
+                item.setQuantity(item.getQuantity() + quantity);
+            }
+            return this.itemService.saveItem(item);
+        }
+        else {
+            throw new ProductNotFoundException(productId);
+        }
+    }
+
+    @Override
     public List<Item> removeBookFromShoppingCart(String userId, Long itemId) {
         if(!this.shoppingCartRepository.existsByUserUsernameAndStatus(userId, CartStatus.CREATED)){
             throw new NoActiveShoppingCartFound(userId);
@@ -119,7 +141,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             List<Item> items = this.findShoppingCartItems(shoppingCart.getId());
             for (Item item : items){
                 if(item.getProduct().getAvalibleProducts() < item.getQuantity()){
-                    throw new ProductOutOfStockException(item.getProduct().getId());
+                    throw new ProductOutOfStockException(item.getProduct().getName());
                 }
                 if (! (item.getProduct().getAvalibleProducts() < item.getQuantity())){
                     item.getProduct().setAvalibleProducts(item.getProduct().getAvalibleProducts() - item.getQuantity());

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
 public class ProductOutOfStockException extends RuntimeException{
 
-    public ProductOutOfStockException(long id){
-        super(String.format("Ths book with the id %d is out of stock!", id));
+    public ProductOutOfStockException(String name){
+        super(String.format("Ths book with the name %s is out of stock!", name));
     }
 }
