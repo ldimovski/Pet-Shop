@@ -169,6 +169,7 @@
                                        required
                                        placeholder="Enter amount ov avalible products">
                             </div>
+                            <input type="hidden" th:value="${product.getImageBase64()}" id="imageBase64" name="imageBase64" th:field="*{imageBase64}">
                         </div>
 
                         <div class="col-6">

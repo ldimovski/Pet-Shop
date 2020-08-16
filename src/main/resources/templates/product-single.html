@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 	<title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
 	<meta charset="utf-8">
@@ -140,20 +139,23 @@
 	          	</div>
 	          	<div class="w-100"></div>
 	          	<div class="col-md-12">
-	          		<a style="color: #000;" th:text="${product.getAvalibleProducts()}"></a><span>kg avalible</span>
+	          		<a style="color: #000;" th:text="${product.getAvalibleProducts()}"></a><span>products avalible</span>
 	          	</div>
           	</div>
 					<br>
 					<div class="row">
-						<div class="col-4" th:if="${isModerator}">
+						<div class="col-3" >
 							<p><a id="addToCart"  class="btn btn-black py-3 px-5" style="color: white">Buy</a></p>
 						</div>
 
-						<div class="col-4">
+						<div class="col-3">
 							<p><a href="/shop" class="btn btn-black py-3 px-5">Catalog</a></p>
 						</div>
-						<div class="col-4">
+						<div class="col-3" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
 							<p><a href="/shop" class="btn btn-black py-3 px-5">Edit</a></p>
+						</div>
+						<div class="col-3" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+							<p><a id="deleteProduct" th:attr="productId=${product.getId()}" class="btn btn-black py-3 px-5">Delete</a></p>
 						</div>
 					</div>
     			</div>
@@ -356,11 +358,22 @@
 			$("#addToCart").click(function () {
 				var id = $("#quantity").attr("productId");
 				var quantity = document.getElementById("quantity").value;
-				console.log("Clicked");
+				//console.log("Clicked");
 				$.post('/cart/add/' + id + '/'+quantity, {}, function () {
 
 				}, 'json')
 				window.location.href='/shop?message=Added to cart';
+			});
+
+			$("#deleteProduct").click(function () {
+				console.log("Clicked")
+				var id = $("#deleteProduct").attr("productId");
+				//var quantity = document.getElementById("quantity").value;
+				//console.log("Clicked");
+				$.post('/product/delete/' + id, {}, function () {
+
+				}, 'json')
+				window.location.href='/shop?message=Deleted Product';
 			});
 
 		});

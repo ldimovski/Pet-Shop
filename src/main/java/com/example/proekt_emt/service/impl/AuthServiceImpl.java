@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        Role userRole = this.roleRepository.findByName("Basic");
+        Role userRole = this.roleRepository.findByName("ROLE_BASIC");
         user.setRoles(Collections.singletonList(userRole));
         return this.userService.registerUser(user);
     }

@@ -10,7 +10,9 @@ import com.example.proekt_emt.model.User;
 import com.example.proekt_emt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +45,8 @@ public class ProductController {
     }
 
     @GetMapping("/new")
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
+    //@Secured("ROLE_MODERATOR")
     public String addProductPage(Model model){
         List<Manufacturer> manufacturers = this.manufacturerService.findAll();
         model.addAttribute("manufacturers", manufacturers);
@@ -57,6 +61,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     public String saveProduct(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile image, Model model){
         if (bindingResult.hasErrors()){
             List<Manufacturer> manufacturers = this.manufacturerService.findAll();
@@ -106,12 +111,32 @@ public class ProductController {
             List<StoreLocation> storeLocations = this.storeLocationService.findAll();
             model.addAttribute("stores", storeLocations);
 
-            User user = this.authService.getCurrentUser();
-            model.addAttribute("isModerator", user.isModerator());
             return "product-single";
         }
         catch (RuntimeException ex){
-            return "redirect:/shop?message" + ex.getMessage();
+            return "redirect:/shop?message=" + ex.getMessage();
         }
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(Model model, @PathVariable Long id){
+        this.productService.deleteById(id);
+        return "redirect:/shop?message=Product deleted";
+    }
+
+    @GetMapping("/edit/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
+    //@Secured("ROLE_MODERATOR")
+    public String addProductPage(@PathVariable Long id, Model model){
+        List<Manufacturer> manufacturers = this.manufacturerService.findAll();
+        model.addAttribute("manufacturers", manufacturers);
+
+        Product p = this.productService.findById(id);
+        model.addAttribute("product", p);
+        List<StoreLocation> storeLocations = this.storeLocationService.findAll();
+        model.addAttribute("stores", storeLocations);
+        model.addAttribute("categories", ItemCategory.values());
+        model.addAttribute("types", ItemType.values());
+        return "newProduct";
     }
 }

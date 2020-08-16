@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/home","/signup/**", "/product/**", "/shop").permitAll()
+                    .antMatchers("/", "/home","/signup/**", "/shop", "/about", "/contact").permitAll()
                     .antMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**").permitAll()
                     //.antMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
@@ -66,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .deleteCookies("JSESSIONID")
                     .logoutSuccessUrl("/login")
                     .and()
-                .exceptionHandling().accessDeniedPage("/home?error=You are not authorized!");
+                .exceptionHandling().accessDeniedPage("/shop?shop=You are not authorized!");
 
 
 
