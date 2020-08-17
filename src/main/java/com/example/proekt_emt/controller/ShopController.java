@@ -1,15 +1,9 @@
 package com.example.proekt_emt.controller;
 
-import com.example.proekt_emt.model.DealOfTheDay;
+import com.example.proekt_emt.model.*;
 import com.example.proekt_emt.model.Enumerations.ItemCategory;
 import com.example.proekt_emt.model.Enumerations.ItemType;
-import com.example.proekt_emt.model.Manufacturer;
-import com.example.proekt_emt.model.Product;
-import com.example.proekt_emt.model.StoreLocation;
-import com.example.proekt_emt.service.DealOfTheDayService;
-import com.example.proekt_emt.service.ManufacturerService;
-import com.example.proekt_emt.service.ProductService;
-import com.example.proekt_emt.service.StoreLocationService;
+import com.example.proekt_emt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,22 +22,24 @@ public class ShopController {
     private final ManufacturerService manufacturerService;
     private final DealOfTheDayService dealOfTheDayService;
     private final StoreLocationService storeLocationService;
+    private final ShoppingCartService shoppingCartService;
 
     public ShopController(ProductService productService,
                           ManufacturerService manufacturerService,
                           DealOfTheDayService dealOfTheDayService,
-                          StoreLocationService storeLocationService){
+                          StoreLocationService storeLocationService,
+                          ShoppingCartService shoppingCartService){
         this.productService = productService;
         this.manufacturerService = manufacturerService;
         this.dealOfTheDayService = dealOfTheDayService;
         this.storeLocationService = storeLocationService;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @GetMapping
     public String getShopPage(Model model){
         List<Product> products = this.productService.findAll();
         model.addAttribute("products", products);
-
         return "shop";
 
     }

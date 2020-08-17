@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
@@ -61,10 +61,18 @@
               <ul class="navbar-nav ml-auto">
                   <li class="nav-item active"><a href="/home" class="nav-link">Home</a></li>
                   <li class="nav-item active"><a href="/shop" class="nav-link">Shop</a></li>
+                  <li class="nav-item dropdown" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                      <a class="nav-link dropdown-toggle" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New</a>
+                      <div class="dropdown-menu" aria-labelledby="dropdown04">
+                          <a class="dropdown-item" href="/product/new">Product</a>
+                          <a class="dropdown-item" href="/manufacturer/new">Manufacturer</a>
+                          <a class="dropdown-item" href="/store/new">Store Location</a>
+                      </div>
+                  </li>
                   <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
                   <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
-                  <li class="nav-item cta cta-colored"><a href="#" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
+                  <li class="nav-item cta cta-colored"><a style="font-size: 16px; margin-right: 2px;" href="/cart" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
+                  <li class="nav-item cta cta-colored"><a style="font-size: 16px;" href="/user" class="nav-link"><span class="icon-user"></span></a></li>
               </ul>
           </div>
       </div>
@@ -82,31 +90,35 @@
       </div>
   </div>
 
-    <section class="ftco-section contact-section bg-light">
+  <section class="ftco-section contact-section bg-light">
       <div class="container">
-      	<div class="row d-flex mb-5 contact-info">
-          <div class="w-100"></div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Address:</span> 198 West 21th Street, Suite 721 New York NY 10016</p>
-	          </div>
+          <div class="row d-flex mb-5 contact-info">
+              <h3>Our Store Locations</h3>
+              <table class="table table-striped">
+                  <thead>
+                  <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Location</th>
+                      <th scope="col">Working Time</th>
+                      <th scope="col">Number</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="store : ${stores}">
+                      <th scope="row" th:text="${store.getName()}"></th>
+                      <td th:text="${store.getLocation()}"></td>
+                      <td th:text="${store.getWorkingTime()}"></td>
+                      <td th:text="${store.getNumber()}"></td>
+                  </tr>
+                  </tbody>
+              </table>
           </div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Phone:</span> <a href="tel://1234567920">+389 71 788 505</a></p>
-	          </div>
-          </div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Email:</span> <a href="mailto:info@yoursite.com">dimovski.laze@gmail.com</a></p>
-	          </div>
-          </div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Website</span> <a href="#">lavispetshop.com</a></p>
-	          </div>
-          </div>
-        </div>
+      </div>
+  </section>
+
+    <section class="ftco-section contact-section bg-light" style="padding-top: 0">
+      <div class="container">
+
         <div class="row block-9">
           <div class="col-md-6 order-md-last d-flex">
             <form action="#" class="bg-white p-5 contact-form">

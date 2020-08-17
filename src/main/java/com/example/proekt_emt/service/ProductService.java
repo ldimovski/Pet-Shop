@@ -15,4 +15,5 @@ public interface ProductService {
     Product saveProduct(Product product);
     void deleteById(Long id);
     List<Product> getBestProducts();
+    Integer getNumberSoldItems();
 }

@@ -5,6 +5,7 @@ import com.example.proekt_emt.model.Manufacturer;
 import com.example.proekt_emt.model.Product;
 import com.example.proekt_emt.persistance.ManufacturerRepository;
 import com.example.proekt_emt.service.ManufacturerService;
+import com.example.proekt_emt.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,9 +16,12 @@ import java.util.List;
 public class ManufacturerServiceImpl implements ManufacturerService {
 
     private final ManufacturerRepository manufacturerRepository;
+    private final ProductService productService;
 
-    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository){
+    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository,
+                                   ProductService productService){
         this.manufacturerRepository = manufacturerRepository;
+        this.productService = productService;
     }
 
 
@@ -51,5 +55,18 @@ public class ManufacturerServiceImpl implements ManufacturerService {
             }
         }
         return nova;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Manufacturer manufacturer = this.findById(id);
+        List<Product> products = this.productService.findAll();
+
+        for(int i=0; i<products.size(); i++){
+            if(products.get(i).getManufacturer().getId().equals(id)){
+                this.productService.deleteById(products.get(i).getId());
+            }
+        }
+        this.manufacturerRepository.deleteById(id);
     }
 }

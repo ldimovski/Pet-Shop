@@ -10,4 +10,5 @@ public interface StoreLocationService {
     StoreLocation findById(Long id);
     List<Product> getStoreProducts(Long id);
     StoreLocation save(StoreLocation storeLocation);
+    void deleteById(Long id);
 }

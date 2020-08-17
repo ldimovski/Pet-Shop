@@ -48,6 +48,10 @@ public class ProductController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     //@Secured("ROLE_MODERATOR")
     public String addProductPage(Model model){
+
+        List<Product> products =this.productService.findAll();
+        model.addAttribute("products", products);
+
         List<Manufacturer> manufacturers = this.manufacturerService.findAll();
         model.addAttribute("manufacturers", manufacturers);
         model.addAttribute("product", new Product());
@@ -55,6 +59,7 @@ public class ProductController {
         model.addAttribute("stores", storeLocations);
         model.addAttribute("categories", ItemCategory.values());
         model.addAttribute("types", ItemType.values());
+        model.addAttribute("msg", "New Product");
 
 
         return "newProduct";
@@ -64,6 +69,9 @@ public class ProductController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     public String saveProduct(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile image, Model model){
         if (bindingResult.hasErrors()){
+
+            List<Product> products =this.productService.findAll();
+            model.addAttribute("products", products);
             List<Manufacturer> manufacturers = this.manufacturerService.findAll();
             model.addAttribute("manufacturers", manufacturers);
             model.addAttribute("product", new Product());
@@ -96,7 +104,7 @@ public class ProductController {
             e.printStackTrace();
             return "redirect:/product/new?message=" + e.getLocalizedMessage();
         }
-        return "redirect:/shop";
+        return "redirect:/shop?message=Product saved";
     }
 
     @GetMapping("/{id}")
@@ -127,16 +135,25 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     //@Secured("ROLE_MODERATOR")
-    public String addProductPage(@PathVariable Long id, Model model){
+    public String editProduct(@PathVariable Long id, Model model){
         List<Manufacturer> manufacturers = this.manufacturerService.findAll();
         model.addAttribute("manufacturers", manufacturers);
 
-        Product p = this.productService.findById(id);
-        model.addAttribute("product", p);
-        List<StoreLocation> storeLocations = this.storeLocationService.findAll();
-        model.addAttribute("stores", storeLocations);
-        model.addAttribute("categories", ItemCategory.values());
-        model.addAttribute("types", ItemType.values());
-        return "newProduct";
+        try{
+            Product p = this.productService.findById(id);
+            model.addAttribute("product", p);
+            List<Product> products =this.productService.findAll();
+            model.addAttribute("products", products);
+            List<StoreLocation> storeLocations = this.storeLocationService.findAll();
+            model.addAttribute("stores", storeLocations);
+            model.addAttribute("categories", ItemCategory.values());
+            model.addAttribute("types", ItemType.values());
+            model.addAttribute("msg", "Edit Product");
+            return "newProduct";
+        }
+        catch (RuntimeException ex){
+            return "redirect:/shop?message=" + ex.getMessage();
+        }
+
     }
 }

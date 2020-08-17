@@ -85,158 +85,69 @@
 
 <section class="ftco-section contact-section bg-light">
     <div class="container">
+        <div th:if="${param.message}">
+            <h2 class="text-center text-warning" th:text="${param.message}"></h2>
+        </div>
         <h2 style="padding-left: 4%" th:text="${msg}"></h2>
         <div class="row">
 
-            <div class="col-md-12">
-                <form action="/product" method="post" enctype="multipart/form-data" th:object="${product}"  class="bg-white p-5 contact-form">
-                    <input type="text" hidden="hidden" name="id" th:value="${product.getId()}">
+            <div class="col-md-7 ">
 
-                    <div class="row">
-                        <div class="col-6">
+                <form action="/manufacturer" method="post" enctype="multipart/form-data" th:object="${manufacturer}"  class="bg-white p-5 contact-form">
+                    <input type="text" hidden="hidden" name="id" th:value="${manufacturer.getId()}">
+
+
                             <div class="form-group">
                                 <h4 class="text-danger"
                                     th:if="${#fields.hasErrors('name')}"
                                     th:errors="*{name}">
 
                                 </h4>
-                                <label for="name">Product name</label>
+                                <label for="name">Manufacturers name</label>
                                 <input type="text"
                                        class="form-control"
-                                       th:value="${product.getName()}"
+                                       th:value="${manufacturer.getName()}"
                                        id="name"
                                        name="name"
                                        th:field="*{name}"
                                        required
-                                       placeholder="Enter product name">
+                                       placeholder="Enter manufacturer's name">
                             </div>
-
                             <div class="form-group">
                                 <h4 class="text-danger"
                                     th:if="${#fields.hasErrors('description')}"
-                                    th:errors="*{description}">
+                                    th:errors="*{descripton}">
 
                                 </h4>
-                                <label for="name">Product description</label>
+                                <label for="name">Manufacturers description</label>
                                 <input type="text"
                                        class="form-control"
-                                       th:value="${product.getDescription()}"
+                                       th:value="${manufacturer.getDescription()}"
                                        id="description"
                                        name="description"
                                        th:field="*{description}"
-                                       placeholder="Enter product description">
-                            </div>
 
+                                       placeholder="Enter manufacturer's description">
+                            </div>
                             <div class="form-group">
                                 <h4 class="text-danger"
-                                    th:if="${#fields.hasErrors('price')}"
-                                    th:errors="*{price}">
+                                    th:if="${#fields.hasErrors('location')}"
+                                    th:errors="*{location}">
 
                                 </h4>
-                                <label for="name">Product price</label>
+                                <label for="name">Manufacturers location</label>
                                 <input type="text"
                                        class="form-control"
-                                       th:value="${product.getPrice()}"
-                                       id="price"
-                                       name="price"
-                                       th:field="*{price}"
+                                       th:value="${manufacturer.getLocation()}"
+                                       id="location"
+                                       name="location"
+                                       th:field="*{location}"
                                        required
-                                       placeholder="Enter product price">
-                            </div>
-
-                            <div class="form-group">
-                                <h4 class="text-danger"
-                                    th:if="${#fields.hasErrors('avalibleProducts')}"
-                                    th:errors="*{avalibleProducts}">
-
-                                </h4>
-                                <label for="name">Number of avalible products</label>
-                                <input type="text"
-                                       class="form-control"
-                                       th:value="${product.getAvalibleProducts()}"
-                                       id="avalibleProducts"
-                                       name="avalibleProducts"
-                                       th:field="*{avalibleProducts}"
-                                       required
-                                       placeholder="Enter amount ov avalible products">
-                            </div>
-
-                            <div class="form-group">
-                                <h4 class="text-danger"
-                                    th:if="${#fields.hasErrors('rating')}"
-                                    th:errors="*{rating}">
-
-                                </h4>
-                                <label for="name">Product rating</label>
-                                <input type="text"
-                                       class="form-control"
-                                       th:value="${product.getRating()}"
-                                       id="Rating"
-                                       name="Rating"
-                                       th:field="*{rating}"
-                                       required
-                                       placeholder="Enter amount ov avalible products">
-                            </div>
-                            <input type="hidden" th:value="${product.getImageBase64()}" id="imageBase64" name="imageBase64" th:field="*{imageBase64}">
-                        </div>
-
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Manufacturer</label>
-                                <select th:field="*{manufacturer.id}" class="form-control" >
-                                    <option
-                                            th:selected="${product.getManufacturer() != null && product.getManufacturer().getId() == product.getId()}"
-                                            th:each="man : ${manufacturers}"
-                                            th:value="${man.getId()}"
-                                            th:text="${man.getName()}">
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Stores</label>
-                                <select th:field="*{storeLocations}" class="form-control" multiple size='8' style="height: 100px !important;">
-                                    <option
-                                            th:each="store : ${stores}"
-                                            th:value="${store.getId()}"
-                                            th:text="${store.getName()}">
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select th:field="*{itemCategory}" class="form-control">
-                                    <option
-                                            th:each="cat : ${categories}"
-                                            th:value="${cat.name()}"
-                                            th:text="${cat.name()}">
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Type</label>
-                                <select th:field="*{itemType}" class="form-control" >
-                                    <option
-                                            th:each="type : ${types}"
-                                            th:value="${type.name()}"
-                                            th:text="${type.name()}">
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="image">Image</label>
-                                <input name="image" id="image" class="form-control" type="file"/>
+                                       placeholder="Enter manufacturer's location">
                             </div>
 
 
 
-
-                        </div>
-
-                    </div>
 
 
 
@@ -245,20 +156,22 @@
 
                 </form>
 
+
+
             </div>
         </div>
         <hr>
-        <h4>Select product to edit</h4>
+        <h4>Select manufacturer to edit</h4>
         <div class="row">
             <div class="col-md-3">
 
-                <select class="form-control" id="selectEdit">
-                    <option
-                            th:each="man : ${products}"
-                            th:value="${man.getId()}"
-                            th:text="${man.getName()}">
-                    </option>
-                </select>
+                    <select class="form-control" id="selectEdit">
+                        <option
+                                th:each="man : ${all}"
+                                th:value="${man.getId()}"
+                                th:text="${man.getName()}">
+                        </option>
+                    </select>
 
             </div>
             <div class="col-md-3">
@@ -266,13 +179,13 @@
             </div>
         </div>
         <br>
-        <h4>Select product to delete</h4>
+        <h4>Select manufacturer to delete</h4>
         <div class="row">
             <div class="col-md-3">
 
                 <select class="form-control" id="selectDelete">
                     <option
-                            th:each="man : ${products}"
+                            th:each="man : ${all}"
                             th:value="${man.getId()}"
                             th:text="${man.getName()}">
                     </option>
@@ -283,7 +196,6 @@
                 <button class="btn btn-info" id="deleteButton">Delete</button>
             </div>
         </div>
-
     </div>
 </section>
 
@@ -375,21 +287,23 @@
 <script src="js/main.js"></script>
 
 </body>
+
 <script>
     $(document).ready(function () {
         $("#editButton").click(function () {
             var e = document.getElementById("selectEdit");
             var id = e.options[e.selectedIndex].value;
 
-            window.location.href='/product/edit/' + id;
+            window.location.href='/manufacturer/edit/' + id;
         })
 
         $("#deleteButton").click(function () {
             var e = document.getElementById("selectDelete");
             var id = e.options[e.selectedIndex].value;
 
-            window.location.href='/product/delete/' + id;
+            window.location.href='/manufacturer/delete/' + id;
         })
     })
 </script>
+
 </html>

@@ -10,4 +10,5 @@ public interface ManufacturerService {
     Manufacturer saveManufacturer(Manufacturer manufacturer);
     Manufacturer findById(Long id);
     List<Product> getRelatedProducts(Manufacturer manufacturer, Product product);
+    void deleteById(Long id);
 }

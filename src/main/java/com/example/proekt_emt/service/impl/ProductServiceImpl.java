@@ -94,4 +94,15 @@ public class ProductServiceImpl implements ProductService {
 
         return best;
     }
+
+    @Override
+    public Integer getNumberSoldItems() {
+        Integer number = 0;
+        List<Product> products = productRepository.findAll();
+        for (Product p :
+                products) {
+            number = p.getSoldItems() + number;
+        }
+        return number;
+    }
 }

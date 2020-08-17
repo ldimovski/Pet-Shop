@@ -58,4 +58,25 @@ public class StoreLocationServiceImpl implements StoreLocationService {
     public StoreLocation save(StoreLocation storeLocation) {
         return this.storeLocationRepository.save(storeLocation);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        List<Product> products = this.productService.findAll();
+        StoreLocation stt = this.findById(id);
+        for(int i=0; i<products.size(); i++){
+            List<StoreLocation> storeLocations = products.get(i).getStoreLocations();
+            for (StoreLocation store :
+                    storeLocations) {
+                if(store.getId().equals(id)){
+                    storeLocations.remove(store);
+                    Product p = this.productService.findById(products.get(i).getId()) ;
+                    p.setStoreLocations(storeLocations);
+                    this.productService.saveProduct(p);
+                    this.storeLocationRepository.deleteById(id);
+                    break;
+                }
+            }
+        }
+        this.storeLocationRepository.deleteById(id);
+    }
 }

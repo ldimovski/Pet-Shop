@@ -62,10 +62,18 @@
 			  <ul class="navbar-nav ml-auto">
 				  <li class="nav-item active"><a href="/home" class="nav-link">Home</a></li>
 				  <li class="nav-item active"><a href="/shop" class="nav-link">Shop</a></li>
+				  <li class="nav-item dropdown" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+					  <a class="nav-link dropdown-toggle" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New</a>
+					  <div class="dropdown-menu" aria-labelledby="dropdown04">
+						  <a class="dropdown-item" href="/product/new">Product</a>
+						  <a class="dropdown-item" href="/manufacturer/new">Manufacturer</a>
+						  <a class="dropdown-item" href="/store/new">Store Location</a>
+					  </div>
+				  </li>
 				  <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
 				  <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
-				  <li class="nav-item cta cta-colored"><a href="#" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
+				  <li class="nav-item cta cta-colored"><a style="font-size: 16px; margin-right: 2px;" href="/cart" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
+				  <li class="nav-item cta cta-colored"><a style="font-size: 16px;" href="/user" class="nav-link"><span class="icon-user"></span></a></li>
 			  </ul>
 		  </div>
 	  </div>
@@ -86,10 +94,10 @@
     <section class="ftco-section" th:object="${product}" style="padding-bottom: 0px;">
     	<div class="container">
     		<div class="row">
-    			<div class="col-lg-6 mb-5 ftco-animate">
+    			<div class="col-lg-5 mb-5 ftco-animate">
     				<a th:href="${product.getImageBase64()}" class="image-popup"><img th:src="${product.getImageBase64()}" class="img-fluid" alt="Colorlib Template"></a>
     			</div>
-    			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
+    			<div class="col-lg-7 product-details pl-md-5 ftco-animate">
     				<h3 th:text="${product.getName()}"></h3>
 					<h4 class="text-muted" th:text="${product.getManufacturer().getName()}"></h4>
     				<div class="rating d-flex">
@@ -144,18 +152,18 @@
           	</div>
 					<br>
 					<div class="row">
-						<div class="col-3" >
+						<div class="col-3" style="padding-left: 2px; padding-right: 2px;" >
 							<p><a id="addToCart"  class="btn btn-black py-3 px-5" style="color: white">Buy</a></p>
 						</div>
 
-						<div class="col-3">
-							<p><a href="/shop" class="btn btn-black py-3 px-5">Catalog</a></p>
+						<div class="col-3" style="padding-left: 2px; padding-right: 2px;">
+							<p><a href="/shop" class="btn btn-black py-3 px-5">Shop</a></p>
 						</div>
-						<div class="col-3" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-							<p><a href="/shop" class="btn btn-black py-3 px-5">Edit</a></p>
+						<div class="col-3" style="padding-left: 2px; padding-right: 2px;" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+							<p><a th:href="@{/product/edit/{id} (id=${product.getId()})}" class="btn btn-black py-3 px-5">Edit</a></p>
 						</div>
-						<div class="col-3" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-							<p><a id="deleteProduct" th:attr="productId=${product.getId()}" class="btn btn-black py-3 px-5">Delete</a></p>
+						<div class="col-3" style="padding-left: 2px; padding-right: 2px;" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+							<p><a style="color: white" id="deleteProduct" th:attr="productId=${product.getId()}" class="btn btn-black py-3 px-5">Delete</a></p>
 						</div>
 					</div>
     			</div>
