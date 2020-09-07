@@ -102,4 +102,13 @@ public class ShoppingCart {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getAllItems(){
+        String text = "";
+        for (Item item :
+                items) {
+            text = text + item.getProduct().getName() + " x " + item.getQuantity();
+        }
+        return text;
+    }
 }

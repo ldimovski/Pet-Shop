@@ -73,6 +73,7 @@
 	          <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
 	          <li class="nav-item cta cta-colored"><a style="font-size: 16px; margin-right: 2px;" href="/cart" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
               <li class="nav-item cta cta-colored"><a style="font-size: 16px;" href="/user" class="nav-link"><span class="icon-user"></span></a></li>
+			  <li sec:authorize="isAuthenticated()" class="nav-item cta cta-colored" style="margin-top: 3%;"><a style="font-size: 16px;" href="/logout" class="btn btn-outline-info">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -255,7 +256,7 @@
     		<div class="row">
 				<div th:each="product : ${products}" class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
+						<a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" th:src="${product.getImageBase64()}" alt="No Photo">
 							<span  th:if="${product.getRating() > 4}" class="status icon-star"></span>
 
 							<div class="overlay"></div>
@@ -271,15 +272,15 @@
 							</div>
 							<div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() > 0}">
 								<div class="m-auto d-flex">
-									<a th:href="@{/product/{id} (id=${product.getId()})}" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
+									<form th:action="@{/product/{id} (id=${product.getId()})}" th:method="get">
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-menu"></i></span></button></a>
+									</form>
+									<form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
+									</form>
+									<form>
+										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
+									</form>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() == 0}">

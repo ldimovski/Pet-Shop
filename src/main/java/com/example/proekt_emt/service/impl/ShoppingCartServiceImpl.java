@@ -214,6 +214,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    public List<ShoppingCart> getFinishedShoppingCart(String userId){
+        List<ShoppingCart> carts = new ArrayList<ShoppingCart>();
+        for (ShoppingCart sc :
+                this.shoppingCartRepository.findAll()) {
+            if(sc.getUser().getUsername().equals(userId) && sc.getStatus().equals(CartStatus.FINISHED)){
+                carts.add(sc);
+            }
+
+        }
+        return carts;
+    }
+
+    @Override
     public Float getFullPrice(Long shoppingCartId) {
         List<Item> items = this.findShoppingCartItems(shoppingCartId);
         float price = 0;

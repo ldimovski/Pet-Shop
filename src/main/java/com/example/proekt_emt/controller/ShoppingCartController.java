@@ -1,6 +1,7 @@
 package com.example.proekt_emt.controller;
 
 import com.example.proekt_emt.model.Item;
+import com.example.proekt_emt.model.Product;
 import com.example.proekt_emt.model.ShoppingCart;
 import com.example.proekt_emt.model.User;
 import com.example.proekt_emt.model.dto.ChargeRequest;
@@ -63,12 +64,25 @@ public class ShoppingCartController {
         User user = this.authService.getCurrentUser();
         model.addAttribute("user", user);
 
+        Boolean userHasAddress = true;
+
+        if(user.getAddress().equals(" ") || user.getCity().equals(" ") || user.getCountry().equals(" "))
+        {
+            userHasAddress = false;
+        }
+
+        model.addAttribute("userHasAddress", userHasAddress);
+
         return "cart";
     }
 
     @PostMapping("/add/{id}")
     public String addProductToShoppingCart(@PathVariable Long id){
         try{
+            Product p = this.productService.findById(id);
+            if(p.getAvalibleProducts() == 0){
+                return "redirect:/shop?message=That product is not in stock";
+            }
             Item item = this.shoppingCartService.addProductToShoppingCart(this.authService.getCurrentUserId(), id);
         }
         catch (RuntimeException ex){
@@ -80,6 +94,10 @@ public class ShoppingCartController {
     @PostMapping("/add/{id}/{quantity}")
     public String addProductToShoppingCartQuantity(@PathVariable Long id, @PathVariable Integer quantity){
         try{
+            Product p = this.productService.findById(id);
+            if(p.getAvalibleProducts() < quantity){
+                return "redirect:/shop?message=That product does not have " + quantity + " instances in stock";
+            }
             Item item = this.shoppingCartService.addProductToShoppingCartQuantity(this.authService.getCurrentUserId(), id, quantity);
         }
         catch (RuntimeException ex){

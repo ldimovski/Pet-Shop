@@ -61,7 +61,7 @@ public class ManufacturerController {
             return "redirect:/manufacturer/new?message=Location cannot be empty";
         }
         if(manufacturer.getName().equals("")){
-            return "redirect:/manufacturer/new?message=Name cannot be emoty";
+            return "redirect:/manufacturer/new?message=Name cannot be empty";
         }
 
         this.manufacturerService.saveManufacturer(manufacturer);

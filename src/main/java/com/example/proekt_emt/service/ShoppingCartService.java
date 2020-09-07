@@ -17,5 +17,6 @@ public interface ShoppingCartService {
     List<Item> findShoppingCartItems(Long shoppingCartId);
 
     ShoppingCart getActiveShoppingCartOrCreateOne(String userId);
+    List<ShoppingCart> getFinishedShoppingCart(String userId);
     Float getFullPrice(Long shoppingCartId);
 }

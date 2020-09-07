@@ -8,4 +8,5 @@ public interface UserService extends UserDetailsService {
     User findById(String username);
     User registerUser(User user);
     UserDetails loadByUsername(String s);
+    User saveUser(User user);
 }

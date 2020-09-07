@@ -134,7 +134,7 @@
 	                   <i class="ion-ios-remove"></i>
 	                	</button>
 	            		</span>
-	             	<input th:attr="productId=${product.getId()}" type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+	             	<input th:attr="productId=${product.getId()}, productsAvalible=${product.getAvalibleProducts()}" type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
 	             	<span class="input-group-btn ml-2">
 	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
 	                     <i class="ion-ios-add"></i>
@@ -200,7 +200,7 @@
     		<div class="row">
 				<div th:each="product : ${related}" class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
+						<a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" th:src="${product.getImageBase64()}" alt="No Photo">
 							<span  th:if="${product.getRating() > 4}" class="status icon-star"></span>
 
 							<div class="overlay"></div>
@@ -339,8 +339,12 @@
 		        var quantity = parseInt($('#quantity').val());
 
 		        // If is not undefined
+			   var avalible = $("#quantity").attr("productsAvalible");
 
-		            $('#quantity').val(quantity + 1);
+			   if(quantity<avalible){
+				   $('#quantity').val(quantity + 1);
+			   }
+
 
 
 		            // Increment

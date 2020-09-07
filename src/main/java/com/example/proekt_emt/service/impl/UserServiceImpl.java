@@ -28,12 +28,20 @@ public class UserServiceImpl implements UserService {
         if(this.userRepository.existsById(user.getUsername())){
             throw new UserExistsException(user.getUsername());
         }
+        user.setCity(" ");
+        user.setCountry(" ");
+        user.setAddress(" ");
         return this.userRepository.save(user);
     }
 
     @Override
     public UserDetails loadByUsername(String s) {
         return this.userRepository.findById(s).orElseThrow(() -> new UsernameNotFoundException(s));
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return this.userRepository.save(user);
     }
 
     @Override
