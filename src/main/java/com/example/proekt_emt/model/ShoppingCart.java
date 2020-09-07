@@ -28,6 +28,14 @@ public class ShoppingCart {
     private String city;
     private String address;
 
+    private Float price;
+
+    private Integer discount;
+
+    public ShoppingCart(){
+        this.discount = 0;
+    }
+
     @OneToMany(mappedBy = "shoppingCart")
     private List<Item> items;
 
@@ -83,6 +91,14 @@ public class ShoppingCart {
         return country;
     }
 
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -110,5 +126,13 @@ public class ShoppingCart {
             text = text + item.getProduct().getName() + " x " + item.getQuantity();
         }
         return text;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 }

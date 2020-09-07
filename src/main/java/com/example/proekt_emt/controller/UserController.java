@@ -1,6 +1,8 @@
 package com.example.proekt_emt.controller;
 
 import com.example.proekt_emt.model.*;
+import com.example.proekt_emt.model.Enumerations.CartStatus;
+import com.example.proekt_emt.persistance.ShoppingCartRepository;
 import com.example.proekt_emt.service.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ public class UserController {
     private final ShoppingCartService shoppingCartService;
     private final ItemService itemService;
     private final  UserService userService;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     public UserController(ProductService productService,
                                   ManufacturerService manufacturerServic,
@@ -33,7 +36,8 @@ public class UserController {
                                   StoreLocationService storeLocationService,
                                   ShoppingCartService shoppingCartService,
                                   ItemService itemService,
-                          UserService userService){
+                          UserService userService,
+                          ShoppingCartRepository shoppingCartRepository){
         this.productService = productService;
         this.manufacturerService = manufacturerServic;
         this.authService = authService;
@@ -41,6 +45,7 @@ public class UserController {
         this.shoppingCartService = shoppingCartService;
         this.itemService = itemService;
         this.userService = userService;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
 
     @GetMapping
@@ -52,10 +57,12 @@ public class UserController {
         List<Container> containers = new ArrayList<Container>();
 
         List<ShoppingCart> carts = this.shoppingCartService.getFinishedShoppingCart(user.getUsername());
+
+
         for (ShoppingCart cart :  carts) {
             Container temp = new Container();
             temp.setShoppingCart(cart);
-            temp.setPrice(this.shoppingCartService.getFullPrice(cart.getId()) + " MKD");
+            temp.setPrice(cart.getPrice() + " MKD");
             temp.setAddress(cart.getCountry() + "/" + cart.getCity() + "/" + cart.getAddress());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             temp.setEndDateString(cart.getEndDate().format(formatter));

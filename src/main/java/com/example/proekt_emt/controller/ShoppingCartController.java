@@ -1,18 +1,12 @@
 package com.example.proekt_emt.controller;
 
-import com.example.proekt_emt.model.Item;
-import com.example.proekt_emt.model.Product;
-import com.example.proekt_emt.model.ShoppingCart;
-import com.example.proekt_emt.model.User;
+import com.example.proekt_emt.model.*;
 import com.example.proekt_emt.model.dto.ChargeRequest;
 import com.example.proekt_emt.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,19 +23,22 @@ public class ShoppingCartController {
     private final StoreLocationService storeLocationService;
     private final ShoppingCartService shoppingCartService;
     private final ItemService itemService;
+    private final CouponService couponService;
 
     public ShoppingCartController(ProductService productService,
                                   ManufacturerService manufacturerServic,
                                   AuthService authService,
                                   StoreLocationService storeLocationService,
                                   ShoppingCartService shoppingCartService,
-                                  ItemService itemService){
+                                  ItemService itemService,
+                                  CouponService couponService){
         this.productService = productService;
         this.manufacturerService = manufacturerServic;
         this.authService = authService;
         this.storeLocationService = storeLocationService;
         this.shoppingCartService = shoppingCartService;
         this.itemService = itemService;
+        this.couponService = couponService;
     }
 
     @GetMapping
@@ -74,6 +71,22 @@ public class ShoppingCartController {
         model.addAttribute("userHasAddress", userHasAddress);
 
         return "cart";
+    }
+
+    @PostMapping("/coupon")
+    public String addCoupon(@RequestParam("couponCode") String code){
+        try{
+            Coupon coupon = this.couponService.findById(code);
+            ShoppingCart shoppingCart = this.shoppingCartService.getActiveShoppingCartOrCreateOne(this.authService.getCurrentUserId());
+            shoppingCart.setDiscount(coupon.getDiscount());
+            this.shoppingCartService.save(shoppingCart);
+        }
+        catch (RuntimeException ex){
+            return "redirect:/cart?message=" + ex.getLocalizedMessage();
+        }
+
+
+        return "redirect:/cart";
     }
 
     @PostMapping("/add/{id}")

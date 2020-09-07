@@ -19,4 +19,7 @@ public interface ShoppingCartService {
     ShoppingCart getActiveShoppingCartOrCreateOne(String userId);
     List<ShoppingCart> getFinishedShoppingCart(String userId);
     Float getFullPrice(Long shoppingCartId);
+    ShoppingCart save(ShoppingCart cart);
+
+    List<ShoppingCart> findALl();
 }

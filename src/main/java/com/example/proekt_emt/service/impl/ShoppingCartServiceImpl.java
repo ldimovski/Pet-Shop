@@ -229,11 +229,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public Float getFullPrice(Long shoppingCartId) {
         List<Item> items = this.findShoppingCartItems(shoppingCartId);
+        ShoppingCart cart = this.findById(shoppingCartId);
         float price = 0;
         for (Item item : items){
             float tmp = item.getQuantity() * item.getProduct().getPrice();
             price = price + tmp;
         }
+        if(!cart.getDiscount().equals(0)){
+            price = price * (100 - cart.getDiscount())/100;
+        }
         return price;
+    }
+
+    @Override
+    public ShoppingCart save(ShoppingCart cart) {
+        return this.shoppingCartRepository.save(cart);
+    }
+
+    @Override
+    public List<ShoppingCart> findALl() {
+        return this.shoppingCartRepository.findAll();
     }
 }
