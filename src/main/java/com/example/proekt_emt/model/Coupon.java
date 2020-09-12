@@ -28,4 +28,9 @@ public class Coupon {
     public void setDiscount(Integer discount) {
         this.discount = discount;
     }
+
+    public String getFull(){
+        String s = code + " - " + discount+"%";
+        return s;
+    }
 }

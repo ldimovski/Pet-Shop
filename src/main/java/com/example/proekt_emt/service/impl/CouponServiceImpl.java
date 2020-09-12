@@ -6,6 +6,8 @@ import com.example.proekt_emt.persistance.CouponRepository;
 import com.example.proekt_emt.service.CouponService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
@@ -22,5 +24,15 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void deleteById(String code) {
         this.couponRepository.deleteById(code);
+    }
+
+    @Override
+    public List<Coupon> findAll() {
+        return this.couponRepository.findAll();
+    }
+
+    @Override
+    public Coupon addCoupon(Coupon c) {
+        return this.couponRepository.save(c);
     }
 }

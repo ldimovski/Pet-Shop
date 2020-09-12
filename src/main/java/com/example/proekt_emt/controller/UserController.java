@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String saveUser(@Valid User user, BindingResult bindingResult, Model model){
+    public String saveUserAddress(@Valid User user, BindingResult bindingResult, Model model){
 
         if(user.getAddress().equals("")){
             return "redirect:/user/new?message=Address cannot be empty";
