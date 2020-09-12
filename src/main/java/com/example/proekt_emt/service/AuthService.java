@@ -5,5 +5,5 @@ import com.example.proekt_emt.model.User;
 public interface AuthService {
     User getCurrentUser();
     String getCurrentUserId();
-    User signUpUser(String username, String password, String repeatPassword);
+    User signUpUser(String username, String password, String repeatPassword, String country, String city, String address);
 }

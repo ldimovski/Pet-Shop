@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
         if(this.userRepository.existsById(user.getUsername())){
             throw new UserExistsException(user.getUsername());
         }
-        user.setCity(" ");
-        user.setCountry(" ");
-        user.setAddress(" ");
+        //user.setCity(" ");
+        //user.setCountry(" ");
+        //user.setAddress(" ");
         return this.userRepository.save(user);
     }
 

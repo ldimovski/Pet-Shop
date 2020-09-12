@@ -63,7 +63,7 @@ public class ShoppingCartController {
 
         Boolean userHasAddress = true;
 
-        if(user.getAddress().equals(" ") || user.getCity().equals(" ") || user.getCountry().equals(" "))
+        if(user.getAddress().equals(" ") || user.getCity().equals(" ") || user.getCountry().equals(" ") || user.getCity().equals("") || user.getCountry().equals("") || user.getAddress().equals(""))
         {
             userHasAddress = false;
         }

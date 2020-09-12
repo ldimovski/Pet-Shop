@@ -25,9 +25,12 @@ public class SignUpController {
     @PostMapping
     public String signUpUser(@RequestParam String username,
                              @RequestParam String password,
-                             @RequestParam String repeatPassword){
+                             @RequestParam String repeatPassword,
+                             @RequestParam String country,
+                             @RequestParam String city,
+                             @RequestParam String address){
         try {
-            this.authService.signUpUser(username, password, repeatPassword);
+            this.authService.signUpUser(username, password, repeatPassword, country, city, address);
             return "redirect:/login?info=SuccessfulRegistration!";
         }
         catch (RuntimeException ex){

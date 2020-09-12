@@ -42,13 +42,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User signUpUser(String username, String password, String repeatPassword) {
+    public User signUpUser(String username, String password, String repeatPassword, String country, String city, String address) {
         if(!password.equals(repeatPassword)){
             throw new PasswordsDoesntMatchException();
         }
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setCountry(country);
+        user.setCity(city);
+        user.setAddress(address);
         Role userRole = this.roleRepository.findByName("ROLE_BASIC");
         user.setRoles(Collections.singletonList(userRole));
         return this.userService.registerUser(user);
