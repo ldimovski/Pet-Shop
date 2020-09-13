@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product, MultipartFile image) throws IOException {
-        if(product.getImageBase64() == null)
+        if(product.getImageBase64() != null)
         {
             if (image != null && !image.getName().isEmpty()) {
                 byte[] bytes = image.getBytes();
