@@ -222,7 +222,7 @@
 									<form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
 										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
 									</form>
-									<form>
+									<form sec:authorize="isAuthenticated()" th:action="@{/wishlist/add/{id} (id=${product.getId()})}" th:method="post">
 										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
 									</form>
 								</div>

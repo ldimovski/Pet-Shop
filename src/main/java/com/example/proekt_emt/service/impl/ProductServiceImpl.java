@@ -3,10 +3,13 @@ package com.example.proekt_emt.service.impl;
 import com.example.proekt_emt.model.Exceptions.ProductNotFoundException;
 import com.example.proekt_emt.model.Item;
 import com.example.proekt_emt.model.Product;
+import com.example.proekt_emt.model.Wishlist;
 import com.example.proekt_emt.persistance.ItemRepository;
 import com.example.proekt_emt.persistance.ProductRepository;
+import com.example.proekt_emt.persistance.WishlistRepository;
 import com.example.proekt_emt.service.ItemService;
 import com.example.proekt_emt.service.ProductService;
+import com.example.proekt_emt.service.WishlistService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +22,17 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ItemRepository itemRepository;
+    private final WishlistRepository wishlistRepository;
+
 
     public ProductServiceImpl(ProductRepository productRepository,
-                              ItemRepository itemRepository) {
+                              ItemRepository itemRepository,
+                              WishlistRepository wishlistRepository
+                              ) {
         this.productRepository = productRepository;
         //this.itemService = itemService;
         this.itemRepository = itemRepository;
+        this.wishlistRepository = wishlistRepository;
     }
 
     @Override
@@ -68,6 +76,20 @@ public class ProductServiceImpl implements ProductService {
                 this.itemRepository.deleteById(items.get(i).getId());
             }
         }
+
+            List<Wishlist> wishlists = this.wishlistRepository.findAll();
+            for(Wishlist wishlist : wishlists){
+                List<Product> nova = new ArrayList<Product>();
+                for (Product p : wishlist.getProducts()){
+                    if(!p.getId().equals(id)){
+                        nova.add(p);
+                    }
+                }
+                wishlist.setProducts(nova);
+                this.wishlistRepository.save(wishlist);
+            }
+
+
 
         this.productRepository.deleteById(id);
     }

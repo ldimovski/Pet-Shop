@@ -263,7 +263,7 @@
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
 							<p class="text-muted" th:text="${product.getManufacturer().getName()}"></p>
-							<h3><a href="#" th:text="${product.getName()}"></a></h3>
+							<h3><a th:href="@{/product/{id} (id=${product.getId()})}" th:text="${product.getName()}"></a></h3>
 
 							<div class="d-flex">
 								<div class="pricing">
@@ -278,7 +278,7 @@
 									<form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
 										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
 									</form>
-									<form>
+									<form sec:authorize="isAuthenticated()" th:action="@{/wishlist/add/{id} (id=${product.getId()})}" th:method="post">
 										<a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
 									</form>
 								</div>
@@ -301,8 +301,8 @@
           <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
           	<span class="subheading">Best Price For You</span>
             <h2 class="mb-4">Deal of the day</h2>
-            <h3><a href="#">Spinach</a></h3>
-            <span class="price">$10 <a href="#">now $5 only</a></span>
+            <h3><a href="#">Coupon</a></h3>
+			  <span class="price">Use coupon <strong>disc10</strong> and get 10% off on all of your items!!!</span>
             <div id="timer" class="d-flex mt-5">
 						  <div class="time" id="days"></div>
 						  <div class="time pl-3" id="hours"></div>

@@ -98,25 +98,42 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 ftco-animate">
-                <div class="cart-list">
-                    <table class="table">
-                        <thead class="thead-primary">
-                        <tr class="text-center">
-                            <th style="width: 150px;">Date</th>
-                            <th style="width: 150px;">Price</th>
-                            <th style="width: 150px;">Address</th>
+                <h3>Your Wishlist</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-3" th:each="product : ${products}">
+                        <div class="product">
+                            <a th:href="@{/product/{id} (id=${product.getId()})}" class="img-prod"><img class="img-fluid" th:src="${product.getImageBase64()}" alt="No Photo">
+                                <span  th:if="${product.getRating() > 4}" class="status icon-star"></span>
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="text-center" th:each="item : ${carts}">
-                            <td style="width: 150px;" class="total" th:text="${item.getEndDateString()}"></td>
-                            <td style="width: 150px;" class="total" th:text="${item.getPrice()}"></td>
-                            <td style="width: 150px;" class="total" th:text="${item.getAddress()}"></td>
-                        </tr><!-- END TR-->
-                        </tbody>
-                    </table>
+                                <div class="overlay"></div>
+                            </a>
+                            <div class="text py-3 pb-4 px-3 text-center">
+                                <p class="text-muted" th:text="${product.getManufacturer().getName()}"></p>
+                                <h3><a th:href="@{/product/{id} (id=${product.getId()})}" th:text="${product.getName()}"></a></h3>
+
+                                <div class="d-flex">
+                                    <div class="pricing">
+                                        <p class="price"><span th:text="${product.getPriceDollar()}"></span></p>
+                                    </div>
+                                </div>
+                                <div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() > 0}">
+                                    <div class="m-auto d-flex">
+                                            <a th:href="@{/wishlist/buy/{id} (id=${product.getId()})}" class="buy-now d-flex justify-content-center align-items-center mx-1"><span><i class="ion-ios-cart"></i></span></a>
+                                            <a th:href="@{/wishlist/delete/{id} (id=${product.getId()})}" class="buy-now d-flex justify-content-center align-items-center mx-1"><span><i class="icon-ban"></i></span></a>
+
+                                    </div>
+                                </div>
+                                <div class="bottom-area d-flex px-3" th:if="${product.getAvalibleProducts() == 0}">
+                                    <div class="m-auto d-flex">
+                                        <p class="text-danger">Out of stock!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <div class="col-md-4 ftco-animate">
                 <div class="cart-total mb-3">
@@ -148,6 +165,33 @@
                 </div>
             </div>
         </div>
+
+        <h3>Your previous orders</h3>
+        <hr>
+        <div class="row">
+            <div class="cart-list">
+                <table class="table" width="100%">
+                    <thead class="thead-primary">
+                    <tr class="text-center">
+                        <th >Date</th>
+                        <th >Price</th>
+                        <th >Address</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center" th:each="item : ${carts}">
+                        <td  class="total" th:text="${item.getEndDateString()}"></td>
+                        <td  class="total" th:text="${item.getPrice()}"></td>
+                        <td  class="total" th:text="${item.getAddress()}"></td>
+                    </tr><!-- END TR-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
     </div>
 
 </section>

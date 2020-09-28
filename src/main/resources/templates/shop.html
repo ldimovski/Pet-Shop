@@ -93,6 +93,7 @@
     </div>
 
 
+
   <div th:if="${param.message}">
       <h2 class="text-center text-warning" th:text="${param.message}"></h2>
   </div>
@@ -180,7 +181,7 @@
                                             <form th:action="@{/cart/add/{id} (id=${product.getId()})}" th:method="post">
                                                 <a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-cart"></i></span></button></a>
                                             </form>
-                                            <form>
+                                            <form sec:authorize="isAuthenticated()" th:action="@{/wishlist/add/{id} (id=${product.getId()})}" th:method="post">
                                                 <a class="buy-now d-flex justify-content-center align-items-center mx-1"><button type="submit" class="btn btn-sm btn-primary"><span><i class="ion-ios-heart"></i></span></button></a>
                                             </form>
                                         </div>
@@ -291,10 +292,10 @@
           </div>
       </div>
   </footer>
-    
-  
 
-  <!-- loader -->
+
+
+  <!-- loader-->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
@@ -375,6 +376,9 @@ var global = "";
 
 
     $(document).ready(function() {
+
+
+
         $(".customElement").click(function () {
             //console.log("STIGNAV");
             $(this).addClass("active");
@@ -393,6 +397,9 @@ var global = "";
 
         })
     });
+
+
+
 </script>
 
 <style>

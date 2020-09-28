@@ -7,6 +7,7 @@ import com.example.proekt_emt.persistance.RoleRepository;
 import com.example.proekt_emt.persistance.UserRepository;
 import com.example.proekt_emt.service.AuthService;
 import com.example.proekt_emt.service.UserService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User getCurrentUser() {
+
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken){
+            return null;
+        }
+
+        else {
             return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }
 
     }
 

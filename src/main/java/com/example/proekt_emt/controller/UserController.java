@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class UserController {
     private final ItemService itemService;
     private final  UserService userService;
     private final ShoppingCartRepository shoppingCartRepository;
+    private final WishlistService wishlistService;
 
     public UserController(ProductService productService,
                                   ManufacturerService manufacturerServic,
@@ -37,7 +39,8 @@ public class UserController {
                                   ShoppingCartService shoppingCartService,
                                   ItemService itemService,
                           UserService userService,
-                          ShoppingCartRepository shoppingCartRepository){
+                          ShoppingCartRepository shoppingCartRepository,
+                          WishlistService wishlistService){
         this.productService = productService;
         this.manufacturerService = manufacturerServic;
         this.authService = authService;
@@ -46,9 +49,11 @@ public class UserController {
         this.itemService = itemService;
         this.userService = userService;
         this.shoppingCartRepository = shoppingCartRepository;
+        this.wishlistService = wishlistService;
     }
 
     @GetMapping
+    @Transactional
     public String getUserProfile(Model model){
 
         User user = this.authService.getCurrentUser();
@@ -71,6 +76,13 @@ public class UserController {
         }
 
         model.addAttribute("carts", containers);
+
+
+
+        List<Product> products = this.wishlistService.findAllProductsForUser(this.authService.getCurrentUserId());
+        model.addAttribute("products", products);
+
+
         return "user";
     }
 

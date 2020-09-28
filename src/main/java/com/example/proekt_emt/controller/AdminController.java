@@ -103,7 +103,7 @@ public class AdminController {
     }
 
 
-    @PostMapping("/addCoupon/{code}/{discount}")
+    @GetMapping("/addCoupon/{code}/{discount}")
     @Secured({"ROLE_ADMIN"})
     public String deleteCoupon(@PathVariable String code, @PathVariable String discount){
             Coupon c = new Coupon();

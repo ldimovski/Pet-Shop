@@ -23,23 +23,26 @@ public class ShopController {
     private final DealOfTheDayService dealOfTheDayService;
     private final StoreLocationService storeLocationService;
     private final ShoppingCartService shoppingCartService;
-
+    private final AuthService authService;
     public ShopController(ProductService productService,
                           ManufacturerService manufacturerService,
                           DealOfTheDayService dealOfTheDayService,
                           StoreLocationService storeLocationService,
-                          ShoppingCartService shoppingCartService){
+                          ShoppingCartService shoppingCartService,
+                          AuthService authService){
         this.productService = productService;
         this.manufacturerService = manufacturerService;
         this.dealOfTheDayService = dealOfTheDayService;
         this.storeLocationService = storeLocationService;
         this.shoppingCartService = shoppingCartService;
+        this.authService = authService;
     }
 
     @GetMapping
     public String getShopPage(Model model){
         List<Product> products = this.productService.findAll();
         model.addAttribute("products", products);
+
         return "shop";
 
     }

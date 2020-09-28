@@ -119,6 +119,8 @@ public class ProductController {
             List<StoreLocation> storeLocations = this.storeLocationService.findAll();
             model.addAttribute("stores", storeLocations);
 
+
+
             return "product-single";
         }
         catch (RuntimeException ex){
@@ -126,7 +128,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteProduct(Model model, @PathVariable Long id){
         this.productService.deleteById(id);
         return "redirect:/shop?message=Product deleted";
