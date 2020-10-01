@@ -173,7 +173,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart.setCity(user.getCity());
             shoppingCart.setAddress(user.getAddress());
             shoppingCart.setEndDate(LocalDateTime.now());
-
+            shoppingCart.setPrice(price);
             //this.itemService.deleteAllByShoppingCart(shoppingCart.getId());
             return this.shoppingCartRepository.save(shoppingCart);
 
