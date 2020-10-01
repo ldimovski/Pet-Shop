@@ -3,6 +3,7 @@ package com.example.proekt_emt.controller;
 import com.example.proekt_emt.model.*;
 import com.example.proekt_emt.model.Enumerations.ItemCategory;
 import com.example.proekt_emt.model.Enumerations.ItemType;
+import com.example.proekt_emt.model.Enumerations.MyUserType;
 import com.example.proekt_emt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,24 +25,28 @@ public class ShopController {
     private final StoreLocationService storeLocationService;
     private final ShoppingCartService shoppingCartService;
     private final AuthService authService;
+    private final UserService userService;
     public ShopController(ProductService productService,
                           ManufacturerService manufacturerService,
                           DealOfTheDayService dealOfTheDayService,
                           StoreLocationService storeLocationService,
                           ShoppingCartService shoppingCartService,
-                          AuthService authService){
+                          AuthService authService,
+                          UserService userService){
         this.productService = productService;
         this.manufacturerService = manufacturerService;
         this.dealOfTheDayService = dealOfTheDayService;
         this.storeLocationService = storeLocationService;
         this.shoppingCartService = shoppingCartService;
         this.authService = authService;
+        this.userService = userService;
     }
 
     @GetMapping
     public String getShopPage(Model model){
         List<Product> products = this.productService.findAll();
         model.addAttribute("products", products);
+
 
         return "shop";
 

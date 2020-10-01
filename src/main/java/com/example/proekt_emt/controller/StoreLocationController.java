@@ -89,7 +89,7 @@ public class StoreLocationController {
             this.storeLocationService.deleteById(id);
         }
         catch (RuntimeException ex){
-            return "redirect:/shop?message=" + ex.getMessage();
+            return "redirect:/shop"; //?message=" + ex.getMessage();
         }
         return "redirect:/shop?message=Store deleted";
     }

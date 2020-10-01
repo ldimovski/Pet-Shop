@@ -4,6 +4,9 @@
     <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="google-signin-client_id" content="577364415474-uep6gf11s551k3a4svd9etmnj60pe0uc.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
     <base href="/">
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
@@ -73,6 +76,8 @@
                 <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
                 <li class="nav-item cta cta-colored"><a style="font-size: 16px; margin-right: 2px;" href="/cart" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
                 <li class="nav-item cta cta-colored"><a style="font-size: 16px;" href="/user" class="nav-link"><span class="icon-user"></span></a></li>
+                <li sec:authorize="isAuthenticated()" class="nav-item " style="margin-top: 3%; margin-left: 5px"><a style="font-size: 16px;" onclick="signOut();" class="btn btn-outline-info">Logout</a></li>
+
             </ul>
         </div>
     </div>
@@ -317,6 +322,21 @@
 
 
     })
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+            window.location.href='/logout';
+        });
+        //
+    }
+
+    function onLoad() {
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    }
 </script>
 
 </html>

@@ -1,5 +1,6 @@
 package com.example.proekt_emt.controller;
 
+import com.example.proekt_emt.model.Enumerations.MyUserType;
 import com.example.proekt_emt.service.AuthService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +31,12 @@ public class SignUpController {
                              @RequestParam String city,
                              @RequestParam String address){
         try {
-            this.authService.signUpUser(username, password, repeatPassword, country, city, address);
+            this.authService.signUpUser(username, password, repeatPassword, country, city, address, MyUserType.INTERNAL);
             return "redirect:/login?info=SuccessfulRegistration!";
         }
         catch (RuntimeException ex){
             return "redirect:/signup?error=" + ex.getLocalizedMessage();
         }
     }
+
 }

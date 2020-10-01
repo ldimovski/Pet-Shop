@@ -1,7 +1,9 @@
 package com.example.proekt_emt.config;
 
 import com.example.proekt_emt.service.UserService;
+import com.example.proekt_emt.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

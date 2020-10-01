@@ -4,8 +4,11 @@
     <title>Lavi - Pet Shop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+	<meta name="google-signin-client_id" content="577364415474-uep6gf11s551k3a4svd9etmnj60pe0uc.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+
+	  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
@@ -73,7 +76,7 @@
 	          <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
 	          <li class="nav-item cta cta-colored"><a style="font-size: 16px; margin-right: 2px;" href="/cart" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
               <li class="nav-item cta cta-colored"><a style="font-size: 16px;" href="/user" class="nav-link"><span class="icon-user"></span></a></li>
-			  <li sec:authorize="isAuthenticated()" class="nav-item " style="margin-top: 3%; margin-left: 5px"><a style="font-size: 16px;" href="/logout" class="btn btn-outline-info">Logout</a></li>
+			  <li sec:authorize="isAuthenticated()" class="nav-item " style="margin-top: 3%; margin-left: 5px"><a style="font-size: 16px;" onclick="signOut();" class="btn btn-outline-info">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -348,7 +351,7 @@
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Vegefoods</h2>
+              <h2 class="ftco-heading-2">Lavi's Pet Shop</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean orci lectus, dapibus ullamcorper mattis sit amet, tincidunt in justo. </p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
@@ -422,6 +425,25 @@
     
   </body>
 </html>
+
+
+<script>
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function () {
+			console.log('User signed out.');
+			window.location.href='/logout';
+		});
+		//
+	}
+
+	function onLoad() {
+		gapi.load('auth2', function() {
+			gapi.auth2.init();
+		});
+	}
+
+</script>
 
 <style>
 	.hovereffect {

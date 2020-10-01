@@ -1,5 +1,6 @@
 package com.example.proekt_emt.service.impl;
 
+import com.example.proekt_emt.model.Enumerations.MyUserType;
 import com.example.proekt_emt.model.Exceptions.PasswordsDoesntMatchException;
 import com.example.proekt_emt.model.Role;
 import com.example.proekt_emt.model.User;
@@ -50,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User signUpUser(String username, String password, String repeatPassword, String country, String city, String address) {
+    public User signUpUser(String username, String password, String repeatPassword, String country, String city, String address, MyUserType type) {
         if(!password.equals(repeatPassword)){
             throw new PasswordsDoesntMatchException();
         }
@@ -62,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
         user.setAddress(address);
         Role userRole = this.roleRepository.findByName("ROLE_BASIC");
         user.setRoles(Collections.singletonList(userRole));
+        user.setUserType(type);
         return this.userService.registerUser(user);
     }
 }

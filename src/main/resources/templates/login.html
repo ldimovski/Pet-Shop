@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
+    <title>Lavi's Pet Shop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
     <meta name="google-signin-client_id" content="577364415474-uep6gf11s551k3a4svd9etmnj60pe0uc.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
@@ -95,7 +95,7 @@
 
  </div>
 
- <button id="testBtn" >TEST</button>
+
 
  <div class="container">
 
@@ -119,7 +119,10 @@
         <a href="/signup" class="btn btn-block btn-light">Register here</a>
 
 
-        <div class="g-signin2" data-onsuccess="onSignIn" >Sign in with google</div>
+        <div class="g-signin2" data-onsuccess="onSignIn" onclick="ClickLogin()" >Sign in with google</div>
+
+     <!--  <a href="#" onclick="signOut();">Sign out</a> -->
+
 
 </div>
 
@@ -151,30 +154,84 @@
 
 <script>
 
-    function onSignIn(googleUser) {
 
-        console.log("HI");
+    var clicked=false;//Global Variable
 
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
 
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
+    function ClickLogin()
+    {
+        console.log("Stignav");
+        clicked=true;
     }
 
-    $(document).ready(function() {
+    function onSignIn(googleUser) {
 
-        $("#testBtn").click(function () {
-            console.log("Stignav");
+        if(clicked){
+            // Useful data for your client-side scripts:
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            // The ID token you need to pass to your backend:
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+
+
+            /*
+            console.log("Stignav 1");
+            $(document).ready(function(){
+                $.post('/login/signInGoogle/' + profile.getFamilyName() + '/' + "TEST", {}, function () {
+
+                }, 'json')
+            });
+
+
+            console.log("Stignav 2");*/
+
+
+
+            //window.location.href='/login/signInGoogle/' + profile.getFamilyName() + '/' + profile.getId;
+
+
+            $(document).ready(function(){
+                        $.ajax({
+                            type: 'POST',
+                            url: '/login/signInGoogle',
+                            data: {
+                                'username': profile.getFamilyName(),
+                                'token': 'TEST'
+                            },
+                            success: function(msg){
+                                //alert('wow' + msg);
+                            }
+                        });
+            });
+
+            window.location.href='/shop?message=Logged in';
+        }
+
+    }
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
         });
-    });
+    }
+
+    window.onbeforeunload = function(e){
+        gapi.auth2.getAuthInstance().signOut();
+    };
+
+    function onLoad() {
+        console.log("Stignav 1");
+        signOut();
+        console.log("Stignav 2");
+    }
 
 
 

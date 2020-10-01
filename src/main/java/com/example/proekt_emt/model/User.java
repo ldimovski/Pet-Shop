@@ -1,5 +1,6 @@
 package com.example.proekt_emt.model;
 
+import com.example.proekt_emt.model.Enumerations.MyUserType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +24,9 @@ public class User implements UserDetails {
     private String country;
     private String city;
     private String address;
+
+    @Enumerated(EnumType.STRING)
+    private MyUserType userType;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -110,5 +114,13 @@ public class User implements UserDetails {
             }
         }
         return false;
+    }
+
+    public MyUserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(MyUserType userType) {
+        this.userType = userType;
     }
 }
