@@ -70,6 +70,17 @@ public class ShoppingCartController {
 
         model.addAttribute("userHasAddress", userHasAddress);
 
+
+
+        // Vo slucaj nekoj price vo profilot da e null
+        /*
+        List<ShoppingCart> all = this.shoppingCartService.findALl();
+        for (ShoppingCart cart :
+                all) {
+            cart.setPrice(this.shoppingCartService.getFullPrice(cart.getId()));
+            this.shoppingCartService.save(cart);
+        }*/
+
         return "cart";
     }
 

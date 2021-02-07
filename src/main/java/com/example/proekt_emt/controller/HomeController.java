@@ -35,6 +35,7 @@ public class HomeController {
         List<Product> products = this.productService.getBestProducts();
         model.addAttribute("products", products);
 
+
         return "index";
 
         //DealOfTheDay d = this.dealOfTheDayService.findFirstByActive(true);
