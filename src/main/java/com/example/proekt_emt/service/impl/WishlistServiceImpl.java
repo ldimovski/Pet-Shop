@@ -8,10 +8,12 @@ import com.example.proekt_emt.service.ProductService;
 import com.example.proekt_emt.service.UserService;
 import com.example.proekt_emt.service.WishlistService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WishlistServiceImpl implements WishlistService {
@@ -33,6 +35,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
+    @Transactional
     public Wishlist findByUser(String username) {
         Wishlist wishlist = this.wishlistRepository.findByUserUsername(username);
         if(wishlist == null){
@@ -44,6 +47,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
+    @Transactional
     public List<Wishlist> findAll() {
         return this.wishlistRepository.findAll();
     }
@@ -77,17 +81,27 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     @Transactional
     public void deleteProductFromWishlist(String username, Long productId) {
-        Product product = this.productService.findById(productId);
+
         Wishlist wishlist = this.findByUser(username);
-        List<Product> products= wishlist.getProducts();
-        List<Product> novaLista = new ArrayList<Product>();
-        for(Product p : products){
-            if(!p.getId().equals(productId)){
-                novaLista.add(p);
-            }
-        }
-        wishlist.setProducts(novaLista);
+        wishlist.setProducts(
+                wishlist.getProducts()
+                .stream()
+                .filter(p -> !p.getId().equals(productId))
+                .collect(Collectors.toList())
+        );
         this.save(wishlist);
+
+//        Product product = this.productService.findById(productId);
+//        Wishlist wishlist = this.findByUser(username);
+//        List<Product> products= wishlist.getProducts();
+//        List<Product> novaLista = new ArrayList<Product>();
+//        for(Product p : products){
+//            if(!p.getId().equals(productId)){
+//                novaLista.add(p);
+//            }
+//        }
+//        wishlist.setProducts(novaLista);
+//        this.save(wishlist);
     }
 
     @Override

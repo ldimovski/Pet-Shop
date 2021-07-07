@@ -5,6 +5,7 @@ import com.example.proekt_emt.model.Wishlist;
 
 import java.util.List;
 
+
 public interface WishlistService {
     Wishlist findById(Long id);
     Wishlist findByUser(String username);

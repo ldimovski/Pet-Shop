@@ -13,9 +13,11 @@ import com.stripe.exception.*;
 import com.stripe.model.Charge;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -43,7 +45,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 
     @Override
-    public ShoppingCart createShoppingCart(String userId) {
+    public ShoppingCart createShoppingCart(String userId) { // 0 usages ??
             User user = this.userService.findById(userId);
             if(this.shoppingCartRepository.existsByUserUsernameAndStatus(userId, CartStatus.CREATED)){
                 throw new ActiveShoppingCartExistsException(userId);
@@ -98,7 +100,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public List<Item> removeBookFromShoppingCart(String userId, Long itemId) {
+    public List<Item> removeProductFromShoppingCart (String userId, Long itemId) {
         if(!this.shoppingCartRepository.existsByUserUsernameAndStatus(userId, CartStatus.CREATED)){
             throw new NoActiveShoppingCartFound(userId);
         }
@@ -187,24 +189,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public List<Item> findShoppingCartItems(Long shoppingCartId) {
-        List<Item> items = this.itemService.findAll();
-
-        List<Item> finalItems = new ArrayList<Item>();
-
-        for(Item item : items){
-            if(item.getShoppingCart().getId().equals(shoppingCartId))
-            {
-                finalItems.add(item);
-            }
-        }
-
-        return finalItems;
+        return this.itemService
+                .findAll()
+                .stream()
+                .filter(i -> i.getShoppingCart().getId().equals(shoppingCartId))
+                .collect(Collectors.toList());
     }
 
     @Override
     public ShoppingCart getActiveShoppingCartOrCreateOne(String userId) {
         ShoppingCart shoppingCart = this.shoppingCartRepository.findByUserUsernameAndStatus(userId, CartStatus.CREATED);
-        //      .orElseThrow(() -> new NoActiveShoppingCartFound(userId));
         if (shoppingCart == null){
             shoppingCart = new ShoppingCart();
             shoppingCart.setUser(this.userService.findById(userId));
@@ -215,30 +209,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public List<ShoppingCart> getFinishedShoppingCart(String userId){
-        List<ShoppingCart> carts = new ArrayList<ShoppingCart>();
-        for (ShoppingCart sc :
-                this.shoppingCartRepository.findAll()) {
-            if(sc.getUser().getUsername().equals(userId) && sc.getStatus().equals(CartStatus.FINISHED)){
-                carts.add(sc);
-            }
+        return this.shoppingCartRepository
+                .findAll()
+                .stream()
+                .filter(sc -> sc.getUser().getUsername().equals(userId) && sc.getStatus().equals(CartStatus.FINISHED))
+                .collect(Collectors.toList());
 
-        }
-        return carts;
     }
 
     @Override
     public Float getFullPrice(Long shoppingCartId) {
-        List<Item> items = this.findShoppingCartItems(shoppingCartId);
+
         ShoppingCart cart = this.findById(shoppingCartId);
-        float price = 0;
-        for (Item item : items){
-            float tmp = item.getQuantity() * item.getProduct().getPrice();
-            price = price + tmp;
-        }
+        float priceFinal = new Double(this.findShoppingCartItems(shoppingCartId)
+                .stream()
+                .mapToDouble(i -> i.getQuantity() * i.getProduct().getPrice())
+                .sum()).floatValue();
+
         if(!cart.getDiscount().equals(0)){
-            price = price * (100 - cart.getDiscount())/100;
+            priceFinal = priceFinal * (100 - cart.getDiscount())/100;
         }
-        return price;
+        return priceFinal;
+
     }
 
     @Override
@@ -247,6 +239,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public List<ShoppingCart> findALl() {
         return this.shoppingCartRepository.findAll();
     }

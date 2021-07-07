@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StoreLocationServiceImpl implements StoreLocationService {
@@ -38,20 +39,18 @@ public class StoreLocationServiceImpl implements StoreLocationService {
 
     @Override
     public List<Product> getStoreProducts(Long id) {
-        List<Product> products = new ArrayList<Product>();
+
             StoreLocation storeLocation = this.findById(id);
 
             if(storeLocation != null)
             {
-                for (Product p :
-                        this.productService.findAll()) {
-                    for (StoreLocation sl : p.getStoreLocations()){
-                        if (sl.getId().equals(storeLocation.getId()))
-                            products.add(p);
-                    }
-                }
+                return this.productService
+                        .findAll()
+                        .stream()
+                        .filter(p -> p.getStoreLocations().contains(storeLocation))
+                        .collect(Collectors.toList());
             }
-            return products;
+            return null;
     }
 
     @Override
@@ -61,22 +60,20 @@ public class StoreLocationServiceImpl implements StoreLocationService {
 
     @Override
     public void deleteById(Long id) {
-        List<Product> products = this.productService.findAll();
-        StoreLocation stt = this.findById(id);
-        for(int i=0; i<products.size(); i++){
-            List<StoreLocation> storeLocations = products.get(i).getStoreLocations();
-            for (StoreLocation store :
-                    storeLocations) {
-                if(store.getId().equals(id)){
-                    storeLocations.remove(store);
-                    Product p = this.productService.findById(products.get(i).getId()) ;
-                    p.setStoreLocations(storeLocations);
-                    this.productService.saveProduct(p);
-                    this.storeLocationRepository.deleteById(id);
-                    break;
-                }
-            }
-        }
+
+        this.productService
+                .findAll()
+                .stream()
+                .forEach(p -> {
+                    if (p.getStoreLocations().contains(this.findById(id))){
+                        p.setStoreLocations(p.getStoreLocations()
+                        .stream()
+                        .filter(s -> !s.getId().equals(id))
+                        .collect(Collectors.toList()));
+                        this.productService.saveProduct(p);
+                    }
+                });
         this.storeLocationRepository.deleteById(id);
+
     }
 }

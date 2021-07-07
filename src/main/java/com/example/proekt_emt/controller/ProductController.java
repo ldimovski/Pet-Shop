@@ -128,7 +128,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteProduct(Model model, @PathVariable Long id){
         this.productService.deleteById(id);
         return "redirect:/shop?message=Product deleted";

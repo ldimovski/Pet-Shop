@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "storeLocations")
-public class StoreLocation {
+public class StoreLocation implements Comparable<StoreLocation>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -93,5 +93,10 @@ public class StoreLocation {
             }
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(StoreLocation o) {
+        return Float.compare(this.id, o.id);
     }
 }

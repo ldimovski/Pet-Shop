@@ -132,7 +132,7 @@ public class ShoppingCartController {
 
     @PostMapping("/remove/{id}")
     public String removeProductFromShoppingCart(@PathVariable Long id){
-        List<Item> items = this.shoppingCartService.removeBookFromShoppingCart(this.authService.getCurrentUserId(), id);
+        List<Item> items = this.shoppingCartService.removeProductFromShoppingCart(this.authService.getCurrentUserId(), id);
         return "redirect:/cart";
     }
 

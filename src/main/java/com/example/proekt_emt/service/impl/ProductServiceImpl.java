@@ -11,11 +11,13 @@ import com.example.proekt_emt.service.ItemService;
 import com.example.proekt_emt.service.ProductService;
 import com.example.proekt_emt.service.WishlistService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -30,7 +32,6 @@ public class ProductServiceImpl implements ProductService {
                               WishlistRepository wishlistRepository
                               ) {
         this.productRepository = productRepository;
-        //this.itemService = itemService;
         this.itemRepository = itemRepository;
         this.wishlistRepository = wishlistRepository;
     }
@@ -71,60 +72,38 @@ public class ProductServiceImpl implements ProductService {
 
 
         List<Item> items = this.itemRepository.findAll();
-        for(int i=0; i< items.size(); i++){
-            if(items.get(i).getProduct().getId().equals(id)){
-                this.itemRepository.deleteById(items.get(i).getId());
-            }
-        }
 
-            List<Wishlist> wishlists = this.wishlistRepository.findAll();
-            for(Wishlist wishlist : wishlists){
-                List<Product> nova = new ArrayList<Product>();
-                for (Product p : wishlist.getProducts()){
-                    if(!p.getId().equals(id)){
-                        nova.add(p);
-                    }
-                }
-                wishlist.setProducts(nova);
-                this.wishlistRepository.save(wishlist);
-            }
+        items.stream()
+                .filter(i -> i.getProduct().getId().equals(id))
+                .forEach(i -> {
+                    this.itemRepository.deleteById(i.getId());
+                });
 
-
+            this.wishlistRepository
+                    .findAll()
+                    .stream()
+                    .forEach(w -> {
+                        List<Product> nova = new ArrayList<>();
+                        nova = w.getProducts().stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+                        w.setProducts(nova);
+                        this.wishlistRepository.save(w);
+                    });
 
         this.productRepository.deleteById(id);
     }
 
     @Override
     public List<Product> getBestProducts() {
-        List<Product> products = this.productRepository.findAll();
-        Collections.sort(products, new Comparator<Product>() {
-            @Override
-            public int compare(Product o1, Product o2) {
-                return Float.compare(o1.getRating(), o2.getRating());
-            }
-        });
-        List<Product> best = new ArrayList<Product>();
-        int i = 0;
-        Collections.reverse(products);
-        for (Product p :
-                products) {
-            if (i < 4) {
-                best.add(p);
-                i++;
-            }
-        }
-
-        return best;
+        return this.productRepository
+                .findAll()
+                .stream()
+                .sorted(Comparator.reverseOrder())
+                .limit(4)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Integer getNumberSoldItems() {
-        Integer number = 0;
-        List<Product> products = productRepository.findAll();
-        for (Product p :
-                products) {
-            number = p.getSoldItems() + number;
-        }
-        return number;
+        return this.productRepository.findAll().stream().mapToInt(p -> p.getSoldItems()).sum();
     }
 }

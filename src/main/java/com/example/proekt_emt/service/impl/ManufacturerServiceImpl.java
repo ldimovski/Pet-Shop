@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ManufacturerServiceImpl implements ManufacturerService {
@@ -45,16 +46,20 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     @Transactional
     public List<Product> getRelatedProducts(Manufacturer manufacturer, Product product) {
         List<Product> products = manufacturer.getProducts();
-        List<Product> nova = new ArrayList<Product>();
-        int i = 0;
-        for (Product p: products) {
-            if(i < 4 && !p.getId().equals(product.getId()))
-            {
-                nova.add(p);
-                i++;
-            }
-        }
-        return nova;
+//        List<Product> nova = new ArrayList<Product>();
+//        int i = 0;
+        return products.stream()
+                .filter(p -> !p.getId().equals(product.getId()))
+                .limit(4)
+                .collect(Collectors.toList());
+//        for (Product p: products) {
+//            if(i < 4 && !p.getId().equals(product.getId()))
+//            {
+//                nova.add(p);
+//                i++;
+//            }
+//        }
+//        return nova;
     }
 
     @Override
@@ -62,11 +67,17 @@ public class ManufacturerServiceImpl implements ManufacturerService {
         Manufacturer manufacturer = this.findById(id);
         List<Product> products = this.productService.findAll();
 
-        for(int i=0; i<products.size(); i++){
-            if(products.get(i).getManufacturer().getId().equals(id)){
-                this.productService.deleteById(products.get(i).getId());
-            }
-        }
+        products.stream()
+                .filter(p -> p.getManufacturer().getId().equals(id))
+                .forEach(p -> {
+                    this.productService.deleteById(p.getId());
+        });
+
+//        for(int i=0; i<products.size(); i++){
+//            if(products.get(i).getManufacturer().getId().equals(id)){
+//                this.productService.deleteById(products.get(i).getId());
+//            }
+//        }
         this.manufacturerRepository.deleteById(id);
     }
 }

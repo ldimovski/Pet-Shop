@@ -10,7 +10,7 @@ public interface ShoppingCartService {
     ShoppingCart createShoppingCart(String userId);
     Item addProductToShoppingCart(String userId, Long productId);
     Item addProductToShoppingCartQuantity(String userId, Long productId, Integer quantity);
-    List<Item> removeBookFromShoppingCart(String userId, Long bookId);
+    List<Item> removeProductFromShoppingCart(String userId, Long bookId);
     ShoppingCart cancelActiveShoppingCart(String userId);
     ShoppingCart checkoutShoppingCartStripe(String userId, ChargeRequest chargeRequest);
     ShoppingCart findById(Long shoppingCartId);
