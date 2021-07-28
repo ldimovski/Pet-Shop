@@ -34,6 +34,7 @@ public class ShoppingCart {
 
     public ShoppingCart(){
         this.discount = 0;
+        this.price = discount.floatValue();
     }
 
     @OneToMany(mappedBy = "shoppingCart")

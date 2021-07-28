@@ -92,7 +92,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             else {
                 item.setQuantity(item.getQuantity() + quantity);
             }
-            return this.itemService.saveItem(item);
+            this.itemService.saveItem(item);
+            shoppingCart.setPrice(this.getFullPrice(shoppingCart.getId()));
+            this.shoppingCartRepository.save(shoppingCart);
+            return item;
         }
         else {
             throw new ProductNotFoundException(productId);
@@ -113,6 +116,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     break;
                 }
             }
+            shoppingCart.setPrice(this.getFullPrice(shoppingCart.getId()));
+            this.save(shoppingCart);
             return this.findShoppingCartItems(shoppingCart.getId());
         }
     }
@@ -168,15 +173,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             }
 
 
-            //shoppingCart.setItems(items);
-            shoppingCart.setStatus(CartStatus.FINISHED);
-            User user = this.authService.getCurrentUser();
+            shoppingCart.setStatus(CartStatus.PAYED);
+//            User user = this.authService.getCurrentUser();
+            User user = this.userService.findById(userId);
             shoppingCart.setCountry(user.getCountry());
             shoppingCart.setCity(user.getCity());
             shoppingCart.setAddress(user.getAddress());
             shoppingCart.setEndDate(LocalDateTime.now());
             shoppingCart.setPrice(price);
-            //this.itemService.deleteAllByShoppingCart(shoppingCart.getId());
             return this.shoppingCartRepository.save(shoppingCart);
 
         }
@@ -212,7 +216,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return this.shoppingCartRepository
                 .findAll()
                 .stream()
-                .filter(sc -> sc.getUser().getUsername().equals(userId) && sc.getStatus().equals(CartStatus.FINISHED))
+                .filter(sc -> sc.getUser().getUsername().equals(userId) && !sc.getStatus().equals(CartStatus.CREATED))
                 .collect(Collectors.toList());
 
     }
@@ -242,5 +246,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public List<ShoppingCart> findALl() {
         return this.shoppingCartRepository.findAll();
+    }
+
+    @Override
+    public void changeStatus(Long scId, CartStatus status) {
+        ShoppingCart sc = this.findById(scId);
+        sc.setStatus(status);
+        this.save(sc);
     }
 }

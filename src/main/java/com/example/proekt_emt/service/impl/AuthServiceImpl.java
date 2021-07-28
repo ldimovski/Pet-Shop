@@ -51,12 +51,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User signUpUser(String username, String password, String repeatPassword, String country, String city, String address, MyUserType type) {
-        if(!password.equals(repeatPassword)){
-            throw new PasswordsDoesntMatchException();
-        }
+    public User signUpUser(String username,
+                           String password,
+                           String email,
+                           String country,
+                           String city,
+                           String address,
+                           MyUserType type,
+                           String firstName,
+                           String lastName,
+                           Boolean termsAndConditions) {
+//        if(!password.equals(repeatPassword)){
+//            throw new PasswordsDoesntMatchException();
+//        }
         User user = new User();
         user.setUsername(username);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setPassword(passwordEncoder.encode(password));
         user.setCountry(country);
         user.setCity(city);
@@ -64,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
         Role userRole = this.roleRepository.findByName("ROLE_BASIC");
         user.setRoles(Collections.singletonList(userRole));
         user.setUserType(type);
+        user.setTermsAndConditions(termsAndConditions);
         return this.userService.registerUser(user);
     }
 }

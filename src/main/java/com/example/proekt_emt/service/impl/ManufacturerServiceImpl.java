@@ -46,20 +46,10 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     @Transactional
     public List<Product> getRelatedProducts(Manufacturer manufacturer, Product product) {
         List<Product> products = manufacturer.getProducts();
-//        List<Product> nova = new ArrayList<Product>();
-//        int i = 0;
         return products.stream()
                 .filter(p -> !p.getId().equals(product.getId()))
                 .limit(4)
                 .collect(Collectors.toList());
-//        for (Product p: products) {
-//            if(i < 4 && !p.getId().equals(product.getId()))
-//            {
-//                nova.add(p);
-//                i++;
-//            }
-//        }
-//        return nova;
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/manufacturers")
 public class ManufacturerControllerApi {
@@ -24,7 +25,7 @@ public class ManufacturerControllerApi {
     }
 
     @GetMapping
-    @Secured({ "ROLE_ADMIN", "ROLE_MODERATOR" })
+//    @Secured({ "ROLE_ADMIN", "ROLE_MODERATOR" })
     public List<ManufacturerDTO> getAllManufacturers(){
         List<ManufacturerDTO> manufacturerDTOS = new ArrayList<>();
         this.manufacturerService

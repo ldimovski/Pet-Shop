@@ -17,11 +17,41 @@ public class UserDTO {
     private String city;
     private String address;
 
+    private String email;
+
     private MyUserType userType;
+
+    private String firstName;
+    private String lastName;
+
+    private Boolean termsAndConditions;
+
     List<Role> roles;
 
     public String getUsername() {
         return username;
+    }
+
+    public UserDTO(String username,
+                   String country,
+                   String city,
+                   String address,
+                   MyUserType userType,
+                   List<Role> roles,
+                   String email,
+                   String firstName,
+                   String lastName,
+                   Boolean termsAndConditions) {
+        this.username = username;
+        this.country = country;
+        this.city = city;
+        this.address = address;
+        this.userType = userType;
+        this.roles = roles;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName =lastName;
+        this.termsAndConditions = termsAndConditions;
     }
 
     public void setUsername(String username) {
@@ -70,5 +100,37 @@ public class UserDTO {
 
     public UserDTO(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Boolean getTermsAndConditions() {
+        return termsAndConditions;
+    }
+
+    public void setTermsAndConditions(Boolean termsAndConditions) {
+        this.termsAndConditions = termsAndConditions;
     }
 }

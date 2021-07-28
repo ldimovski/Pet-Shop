@@ -5,6 +5,8 @@ import com.example.proekt_emt.model.Frontend.WishlistDTO;
 import com.example.proekt_emt.model.Wishlist;
 import com.example.proekt_emt.persistance.WishlistRepository;
 import com.example.proekt_emt.service.WishlistService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,14 +17,11 @@ import java.util.List;
 public class WishlistControllerApi {
 
     private final WishlistService wishlistService;
-    private final WishlistRepository wishlistRepository;
 
     public WishlistControllerApi(
-            WishlistService wishlistService,
-            WishlistRepository wishlistRepository
+            WishlistService wishlistService
     ){
         this.wishlistService = wishlistService;
-        this.wishlistRepository = wishlistRepository;
     }
 
     @GetMapping
@@ -37,32 +36,46 @@ public class WishlistControllerApi {
         return wishlistDTOS;
     }
 
-    @GetMapping("/{username}")
-    public List<ProductDTO> getWishlistProductsFromUser(@PathVariable String username){
+    @GetMapping("/personal")
+    public List<ProductDTO> getWishlistProductsFromUser(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
         List<ProductDTO> productDTOS = new ArrayList<>();
-
         this.wishlistService
-                .findAllProductsForUser(username)
+                .findAllProductsForUser(userDetails.getUsername())
                 .stream()
                 .forEach(p -> {
                     productDTOS.add(new ProductDTO(p));
                 });
         return productDTOS;
-
     }
 
-    @GetMapping("/separate")
-    public List<ProductDTO> getWishlistProductsFromUser2(@RequestParam("user") String username){
-        List<ProductDTO> productDTOS = new ArrayList<>();
-
-        this.wishlistService
-                .findAllProductsForUser(username)
-                .stream()
-                .forEach(p -> {
-                    productDTOS.add(new ProductDTO(p));
-                });
-        return productDTOS;
-
+    @GetMapping("/add/{productId}")
+    public void addProductToWishlist(@PathVariable Long productId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        this.wishlistService.addProductToWishList(userDetails.getUsername(), productId);
     }
+
+    @GetMapping("/remove/{productId}")
+    public void removeProductToWishlist(@PathVariable Long productId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        this.wishlistService.deleteProductFromWishlist(userDetails.getUsername(), productId);
+    }
+
+//    @GetMapping("/separate")
+//    public List<ProductDTO> getWishlistProductsFromUser2(@RequestParam("user") String username){
+//        List<ProductDTO> productDTOS = new ArrayList<>();
+//
+//        this.wishlistService
+//                .findAllProductsForUser(username)
+//                .stream()
+//                .forEach(p -> {
+//                    productDTOS.add(new ProductDTO(p));
+//                });
+//        return productDTOS;
+//
+//    }
 
 }

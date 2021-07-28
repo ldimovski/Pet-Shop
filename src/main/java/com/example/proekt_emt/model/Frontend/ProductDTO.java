@@ -43,6 +43,16 @@ public class ProductDTO  implements Comparable<ProductDTO>{
 
     private String image_html;
 
+    private String imageBase64;
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
     public ProductDTO (Product p){
         this.id = p.getId();
         this.name = p.getName();
@@ -56,6 +66,7 @@ public class ProductDTO  implements Comparable<ProductDTO>{
         this.storeLocations = new ArrayList<>(p.getStoreLocations());
         this.image_html = p.getImage_html();
         this.manufacturer = new ManufacturerDTO(p.getManufacturer());
+        this.imageBase64 = p.getImageBase64();
     }
 
     public Long getId() {

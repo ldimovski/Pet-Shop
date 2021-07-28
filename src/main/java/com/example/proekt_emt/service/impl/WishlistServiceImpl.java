@@ -75,7 +75,6 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setProducts(products);
         this.save(wishlist);
         return wishlist;
-
     }
 
     @Override
@@ -90,18 +89,6 @@ public class WishlistServiceImpl implements WishlistService {
                 .collect(Collectors.toList())
         );
         this.save(wishlist);
-
-//        Product product = this.productService.findById(productId);
-//        Wishlist wishlist = this.findByUser(username);
-//        List<Product> products= wishlist.getProducts();
-//        List<Product> novaLista = new ArrayList<Product>();
-//        for(Product p : products){
-//            if(!p.getId().equals(productId)){
-//                novaLista.add(p);
-//            }
-//        }
-//        wishlist.setProducts(novaLista);
-//        this.save(wishlist);
     }
 
     @Override

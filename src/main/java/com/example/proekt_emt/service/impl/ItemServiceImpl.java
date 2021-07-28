@@ -10,6 +10,7 @@ import com.example.proekt_emt.service.ItemService;
 import com.example.proekt_emt.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,12 +30,24 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> findAllByShoppingCart(Long shoppingCartId) {
+
+        List<Item> finalItem = new ArrayList<>();
         ShoppingCart shoppingCart = this.shoppingCartRepository.findById(shoppingCartId).orElseThrow(() -> new NoShoppingCartFoundException(shoppingCartId));
         if (shoppingCart != null){
-            List<Item> items = itemRepository.findAllByShoppingCart(shoppingCartId);
-            return items;
+            List<Item> items = this.findAll();
+            for (Item item :
+                    items) {
+                if(item.getShoppingCart().getId().equals(shoppingCartId))
+                    finalItem.add(item);
+            }
         }
-        return null;
+        return finalItem;
+//        ShoppingCart shoppingCart = this.shoppingCartRepository.findById(shoppingCartId).orElseThrow(() -> new NoShoppingCartFoundException(shoppingCartId));
+//        if (shoppingCart != null){
+//            List<Item> items = itemRepository.findAllByShoppingCart(shoppingCartId);
+//            return items;
+//        }
+//        return null;
     }
 
     @Override

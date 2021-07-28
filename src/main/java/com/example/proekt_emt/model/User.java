@@ -14,6 +14,9 @@ public class User implements UserDetails {
     @Id
     private String username;
 
+    private String firstName;
+    private String lastName;
+
     private String password;
 
     private boolean isAccountNonExpired;
@@ -24,6 +27,10 @@ public class User implements UserDetails {
     private String country;
     private String city;
     private String address;
+
+    private String email;
+
+    private Boolean termsAndConditions;
 
     @Enumerated(EnumType.STRING)
     private MyUserType userType;
@@ -122,5 +129,37 @@ public class User implements UserDetails {
 
     public void setUserType(MyUserType userType) {
         this.userType = userType;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Boolean getTermsAndConditions() {
+        return termsAndConditions;
+    }
+
+    public void setTermsAndConditions(Boolean termsAndConditions) {
+        this.termsAndConditions = termsAndConditions;
     }
 }

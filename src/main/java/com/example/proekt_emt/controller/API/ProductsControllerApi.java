@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
+//@CrossOrigin(origins="http://localhost:4200")
 public class ProductsControllerApi {
 
     private final ProductService productService;
@@ -62,6 +64,14 @@ public class ProductsControllerApi {
         return productDTOS;
     }
 
+    @GetMapping("/related/{productId}")
+    public List<ProductDTO> getRelatedProducts(@PathVariable Long productId){
+//        Manufacturer man = this.manufacturerService.findById(manufacturerId);
+        Product prod = this.productService.findById(productId);
+        return this.manufacturerService.getRelatedProducts(prod.getManufacturer(), prod).stream().map(p -> new ProductDTO(p)).collect(Collectors.toList());
+    }
+
+    // Na vkupno site produkti
     @GetMapping("/items-sold")
     public Integer getNumberOfSoldItems(){
         return this.productService.getNumberSoldItems();
@@ -69,10 +79,11 @@ public class ProductsControllerApi {
 
     @PostMapping("/add")
     public void addProduct(@RequestBody Product product){
-       if(product.getRating() > 0 && product.getRating() < 5 && product.getPrice() > 0 && product.getAvalibleProducts() >= 0 &&
+       if(product.getPrice() > 0 && product.getAvalibleProducts() >= 0 &&
             product.getSoldItems() >= 0){
            this.productService.saveProduct(product);
        }
 
     }
+
 }

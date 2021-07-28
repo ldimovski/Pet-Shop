@@ -8,6 +8,7 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class ShoppingCartDTO {
     private Long id;
 
     private LocalDateTime createDate = LocalDateTime.now();
-    private LocalDateTime endDate;
+    private String endDate;
 
     private User user;
 
@@ -29,16 +30,27 @@ public class ShoppingCartDTO {
 
     private Integer discount;
 
-    public ShoppingCartDTO(ShoppingCart sc){
+    private List<ItemDTO> items;
+
+    public ShoppingCartDTO(ShoppingCart sc, List<Item> items){
+        this.items = new ArrayList<>();
         this.id = sc.getId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if(sc.getEndDate() != null){
+            this.endDate = sc.getEndDate().format(formatter);
+        }
         this.createDate = sc.getCreateDate();
-        this.endDate = sc.getEndDate();
+//        this.endDate = sc.getEndDate();
         this.user = sc.getUser();
         this.status = sc.getStatus();
         this.country = sc.getCountry();
         this.city = sc.getCity();
         this.address = sc.getAddress();
         this.price = sc.getPrice();
+        for (Item item :
+                items) {
+            this.items.add(new ItemDTO(item));
+        }
         this.discount = sc.getDiscount();
 
     }
@@ -75,11 +87,11 @@ public class ShoppingCartDTO {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -121,5 +133,13 @@ public class ShoppingCartDTO {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public List<ItemDTO> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemDTO> items) {
+        this.items = items;
     }
 }

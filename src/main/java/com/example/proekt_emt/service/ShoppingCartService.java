@@ -1,5 +1,6 @@
 package com.example.proekt_emt.service;
 
+import com.example.proekt_emt.model.Enumerations.CartStatus;
 import com.example.proekt_emt.model.Item;
 import com.example.proekt_emt.model.ShoppingCart;
 import com.example.proekt_emt.model.dto.ChargeRequest;
@@ -22,4 +23,6 @@ public interface ShoppingCartService {
     ShoppingCart save(ShoppingCart cart);
 
     List<ShoppingCart> findALl();
+
+    void changeStatus(Long scId, CartStatus status);
 }

@@ -31,7 +31,7 @@ public class SignUpController {
                              @RequestParam String city,
                              @RequestParam String address){
         try {
-            this.authService.signUpUser(username, password, repeatPassword, country, city, address, MyUserType.INTERNAL);
+//            this.authService.signUpUser(username, password, repeatPassword, country, city, address, MyUserType.INTERNAL);
             return "redirect:/login?info=SuccessfulRegistration!";
         }
         catch (RuntimeException ex){

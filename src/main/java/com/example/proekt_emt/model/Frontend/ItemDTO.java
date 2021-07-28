@@ -17,13 +17,12 @@ public class ItemDTO {
 
     private Integer quantity;
 
-    private ShoppingCartDTO shoppingCart;
 
     public ItemDTO(Item item) {
         this.id = item.getId();
         this.quantity = item.getQuantity();
+//        this.productId = item.getProduct().getId();
         this.product = new ProductDTO(item.getProduct());
-        this.shoppingCart = new ShoppingCartDTO(item.getShoppingCart());
     }
 
     public Long getId() {
@@ -50,19 +49,20 @@ public class ItemDTO {
         this.quantity = quantity;
     }
 
-    public ShoppingCartDTO getShoppingCart() {
-        return shoppingCart;
-    }
+//    public Float getTotalPrice(){
+//        return this.product.getPrice() * quantity;
+//    }
+//
+//    public String getTotalPriceUSD(){
+//        return (this.product.getPrice() * quantity) + "MKD";
+//    }
 
-    public void setShoppingCart(ShoppingCartDTO shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
 
-    public Float getTotalPrice(){
-        return this.product.getPrice() * quantity;
-    }
-
-    public String getTotalPriceUSD(){
-        return (this.product.getPrice() * quantity) + "MKD";
-    }
+//    public Long getProductId() {
+//        return productId;
+//    }
+//
+//    public void setProductId(Long productId) {
+//        this.productId = productId;
+//    }
 }
