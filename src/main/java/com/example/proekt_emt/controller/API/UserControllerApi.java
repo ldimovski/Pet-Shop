@@ -3,9 +3,11 @@ package com.example.proekt_emt.controller.API;
 import com.example.proekt_emt.model.Enumerations.MyUserType;
 import com.example.proekt_emt.model.Frontend.ManufacturerDTO;
 import com.example.proekt_emt.model.Frontend.UserDTO;
+import com.example.proekt_emt.model.Mail;
 import com.example.proekt_emt.model.User;
 import com.example.proekt_emt.service.AuthService;
 import com.example.proekt_emt.service.UserService;
+import com.example.proekt_emt.service.impl.EmailSenderService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,12 @@ public class UserControllerApi {
 
     private final UserService userService;
     private final AuthService authService;
+    private final EmailSenderService emailSenderService;
 
-    public UserControllerApi(UserService userService, AuthService authService){
+    public UserControllerApi(UserService userService, AuthService authService, EmailSenderService emailSenderService){
         this.userService = userService;
         this.authService = authService;
+        this.emailSenderService = emailSenderService;
     }
 
     @GetMapping
@@ -60,6 +64,7 @@ public class UserControllerApi {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getTermsAndConditions());
+            this.emailSenderService.sendEmail(new Mail(user.getEmail(), "New User", "Welcome to Lavi's Pet Shop"));
         }
     }
 

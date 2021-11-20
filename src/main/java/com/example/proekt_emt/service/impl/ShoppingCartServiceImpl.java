@@ -254,4 +254,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         sc.setStatus(status);
         this.save(sc);
     }
+
+    @Override
+    public Boolean userHasBoughtProduct(String username, Long productId) {
+        List<ShoppingCart> carts = this.getFinishedShoppingCart(username);
+        List<Item> allBoughtItems = new ArrayList<>();
+        for (ShoppingCart c : carts){
+            allBoughtItems.addAll(this.itemService.findAllByShoppingCart(c.getId()));
+        }
+        return allBoughtItems
+                .stream()
+                .anyMatch(i -> i.getProduct().getId().equals(productId));
+    }
 }

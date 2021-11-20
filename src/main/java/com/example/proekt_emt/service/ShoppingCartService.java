@@ -4,6 +4,7 @@ import com.example.proekt_emt.model.Enumerations.CartStatus;
 import com.example.proekt_emt.model.Item;
 import com.example.proekt_emt.model.ShoppingCart;
 import com.example.proekt_emt.model.dto.ChargeRequest;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 
@@ -25,4 +26,5 @@ public interface ShoppingCartService {
     List<ShoppingCart> findALl();
 
     void changeStatus(Long scId, CartStatus status);
+    Boolean userHasBoughtProduct(String username, Long productId);
 }

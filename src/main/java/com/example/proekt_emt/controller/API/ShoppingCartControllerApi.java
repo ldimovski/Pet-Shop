@@ -4,6 +4,7 @@ import com.example.proekt_emt.model.Coupon;
 import com.example.proekt_emt.model.Enumerations.CartStatus;
 import com.example.proekt_emt.model.Frontend.ShoppingCartDTO;
 import com.example.proekt_emt.model.ShoppingCart;
+import com.example.proekt_emt.model.User;
 import com.example.proekt_emt.model.dto.ChargeRequest;
 import com.example.proekt_emt.service.CouponService;
 import com.example.proekt_emt.service.ItemService;
@@ -149,5 +150,12 @@ public class ShoppingCartControllerApi {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         this.shoppingCartService.checkoutShoppingCartStripe(userDetails.getUsername(), chargeRequest);
+    }
+
+    @GetMapping("/userHasBought/{productId}")
+    public Boolean userHasBoughtProduct (@PathVariable Long productId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+            .getPrincipal();
+        return this.shoppingCartService.userHasBoughtProduct(userDetails.getUsername(), productId);
     }
 }

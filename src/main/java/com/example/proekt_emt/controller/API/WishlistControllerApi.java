@@ -2,9 +2,13 @@ package com.example.proekt_emt.controller.API;
 
 import com.example.proekt_emt.model.Frontend.ProductDTO;
 import com.example.proekt_emt.model.Frontend.WishlistDTO;
+import com.example.proekt_emt.model.User;
 import com.example.proekt_emt.model.Wishlist;
 import com.example.proekt_emt.persistance.WishlistRepository;
+
 import com.example.proekt_emt.service.WishlistService;
+
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +67,7 @@ public class WishlistControllerApi {
                 .getPrincipal();
         this.wishlistService.deleteProductFromWishlist(userDetails.getUsername(), productId);
     }
+
 
 //    @GetMapping("/separate")
 //    public List<ProductDTO> getWishlistProductsFromUser2(@RequestParam("user") String username){
