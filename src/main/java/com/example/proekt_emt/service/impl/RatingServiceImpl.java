@@ -10,6 +10,7 @@ import com.example.proekt_emt.service.ShoppingCartService;
 import com.example.proekt_emt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.OptionalDouble;
@@ -73,6 +74,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public Rating addRatingFromUserToProduct(String username, Long productId, Integer rating) {
 
         if(this.shoppingCartService.userHasBoughtProduct(username, productId)){
@@ -110,7 +112,7 @@ public class RatingServiceImpl implements RatingService {
     public Double findAverageRatingForProduct(Long productId) {
         List<Rating> ratings = this.findAllRatingsForProduct(productId);
         OptionalDouble avg = ratings.stream().mapToInt(Rating::getRating).average();
-        return avg.isPresent() ? avg.getAsDouble() : -1;
+        return avg.isPresent() ? avg.getAsDouble() : 0;
     }
 
     @Override

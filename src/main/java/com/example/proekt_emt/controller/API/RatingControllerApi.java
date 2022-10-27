@@ -55,10 +55,11 @@ public class RatingControllerApi {
     }
 
     @GetMapping("/add/{productId}/{rating}")
-    public Rating addRatingFromUserToProduct(@PathVariable Long productId, @PathVariable Integer rating){
+    public Boolean addRatingFromUserToProduct(@PathVariable Long productId, @PathVariable Integer rating){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        return this.ratingService.addRatingFromUserToProduct(userDetails.getUsername(), productId, rating);
+        this.ratingService.addRatingFromUserToProduct(userDetails.getUsername(), productId, rating);
+        return true;
     }
 
     @GetMapping("/averageForProduct/{productId}")
